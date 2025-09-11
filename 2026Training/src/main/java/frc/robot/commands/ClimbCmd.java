@@ -12,13 +12,10 @@ public class ClimbCmd extends Command {
   /** Creates a new ClimbCmd. */
   private ClimbSubsystem climbSubsystem;
   private double speed;
-  private double setPoint;
-  private boolean isAbove;
   public ClimbCmd(ClimbSubsystem climbSubsystem, double speed , double setPoint) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.climbSubsystem = climbSubsystem;
     this.speed = speed;
-    isAbove = setPoint < climbSubsystem.getClimbEncoder();
 
     addRequirements(climbSubsystem);
   }

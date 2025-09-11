@@ -12,7 +12,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoDriveCmd extends Command {
   /** Creates a new AutoDriveCmd. */
   private SwerveSubsystem swerveSubsystem;
-  private double xSpeed, ySpeed, thetaSpeed;
   private ChassisSpeeds chassisSpeeds;
   public AutoDriveCmd(SwerveSubsystem swerveSubsystem, double x, double y, double theta) {
     this.swerveSubsystem = swerveSubsystem;

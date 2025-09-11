@@ -35,7 +35,7 @@ public class LadderJoystickCmd extends Command {
   public void execute() {
     //1. get real time joystick input
     if(offsetResetSupplier.get()){
-      ladderSubsystem.setOffset(ladderSubsystem.getLiftEncoder());
+      LadderSubsystem.setOffset(ladderSubsystem.getLiftEncoder());
     }
     double speed = speedFunction.get();
 

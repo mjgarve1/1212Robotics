@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
@@ -39,7 +38,6 @@ public class SwerveModule extends SubsystemBase {
 
   private double absoluteEncoderOffsetRad;
   private int turningMotorId;
-  private int absoluteEncoderId;
 
   private PIDController turningPidController;
 
@@ -57,7 +55,6 @@ public class SwerveModule extends SubsystemBase {
       driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
       turningMotor = new SparkMax(turningMotorId, MotorType.kBrushless);
       this.turningMotorId = turningMotorId;
-      this.absoluteEncoderId=absoluteEncoderId;
 
       driveEncoder = driveMotor.getEncoder();
       turningEncoder = turningMotor.getEncoder();

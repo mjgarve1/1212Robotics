@@ -117,41 +117,41 @@ public final class Constants {
     public static double kclimbDVal = 0.2;
     
   }
-  public static class LimelightConstants{
-    /*
-    /Height in meters
-    /when using april tags for distance, all units should be in meters - J
-    / Coral Station ID: 1, 2, 12, 13 1.35 meters
-    / Processor ID: 3, 16 1.17 m
-    / Reef ID: 6 - 11, 17-22 .17 m
-    / Barge ID: 4, 5, 14, 15 1.78 m
-    */
-    private static double[] kAprilTagHeight = {
-      0, //indexing starts at 0, so we just skip that in the array. - J
-      1.35, //1 
-      1.35, //2
-      1.17, //3
-      1.78, //4
-      1.78, //5
-      .17, //6
-      .17, //7
-      .17, //8
-      .17, //9
-      .17, //10
-      .17, //11
-      1.35, //12
-      1.35, //13
-      1.78, //14
-      1.78, //15
-      1.17, //16
-      .17, //17
-      .17, //18
-      .17, //19
-      .17, //20
-      .17, //21
-      .17, //22
-    };
-  }
+  // public static class LimelightConstants{
+  //   /*
+  //   /Height in meters
+  //   /when using april tags for distance, all units should be in meters - J
+  //   / Coral Station ID: 1, 2, 12, 13 1.35 meters
+  //   / Processor ID: 3, 16 1.17 m
+  //   / Reef ID: 6 - 11, 17-22 .17 m
+  //   / Barge ID: 4, 5, 14, 15 1.78 m
+  //   */
+  //   private static double[] kAprilTagHeight = {
+  //     0, //indexing starts at 0, so we just skip that in the array. - J
+  //     1.35, //1 
+  //     1.35, //2
+  //     1.17, //3
+  //     1.78, //4
+  //     1.78, //5
+  //     .17, //6
+  //     .17, //7
+  //     .17, //8
+  //     .17, //9
+  //     .17, //10
+  //     .17, //11
+  //     1.35, //12
+  //     1.35, //13
+  //     1.78, //14
+  //     1.78, //15
+  //     1.17, //16
+  //     .17, //17
+  //     .17, //18
+  //     .17, //19
+  //     .17, //20
+  //     .17, //21
+  //     .17, //22
+  //   };
+  // }
 
   public static class DriveConstants{
     // Distance between right and left wheels

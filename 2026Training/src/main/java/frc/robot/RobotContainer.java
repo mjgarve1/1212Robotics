@@ -4,14 +4,8 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +16,6 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LadderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.BottomToTopCmdSequence;
 import frc.robot.commands.ClimbCmd;
 import frc.robot.commands.CoralSenseIntakeCmd;
 import frc.robot.commands.LadderJoystickCmd;
@@ -32,7 +25,6 @@ import frc.robot.commands.ResetGyroCmd;
 import frc.robot.commands.SpinIntakeCmd;
 import frc.robot.commands.SpinIntakeJoystickCmd;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.commands.TopToBottomCmdSequence;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LadderSubsystem;
@@ -53,7 +45,6 @@ public class RobotContainer {
   private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
   //private final SendableChooser<Command> autoChooser;
   private final SendableChooser<Command> autosChooser;
-  private final Command testAuto;
   private final Command midAuto;
   private final Command taxiAuto;
   
@@ -105,7 +96,6 @@ public class RobotContainer {
     //autoChooser = AutoBuilder.buildAutoChooser();
 
     autosChooser = new SendableChooser<>();
-    testAuto = Autos.testAuto(swerveSubsystem, intakeSubsystem);
     midAuto = Autos.middleAuto(swerveSubsystem, intakeSubsystem);
     taxiAuto = Autos.taxiAuto(swerveSubsystem);
 

@@ -26,7 +26,7 @@ public class ResetLadderEncoder extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {ladderSub.setOffset(ladderSub.getLiftEncoder());}
+  public void execute() {LadderSubsystem.setOffset(ladderSub.getLiftEncoder());}
 
   // Called once the command ends or is interrupted.
   @Override
