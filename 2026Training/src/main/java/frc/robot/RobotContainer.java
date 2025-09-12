@@ -68,15 +68,15 @@ public class RobotContainer {
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
               swerveSubsystem,
-              () -> -driverJoystickOne.getRawAxis(OIConstants.kDriverYAxis),
-              () -> driverJoystickOne.getRawAxis(OIConstants.kDriverXAxis),
-              () -> driverJoystickOne.getRawAxis(OIConstants.kDriverRotAxisXbox),
+              () -> -driverJoystickOne.getRawAxis(OIConstants.kRobotForwardAxis),
+              () -> driverJoystickOne.getRawAxis(OIConstants.kRobotSidewaysAxis),
+              () -> driverJoystickOne.getRawAxis(OIConstants.kRobotRotateAxis),
               () -> !driverJoystickOne.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
               () -> driverJoystickOne.getRawButton(OIConstants.kFineTurningButton)));
     
     ladderSubsystem.setDefaultCommand(new LadderJoystickCmd(
               ladderSubsystem, 
-              () -> driverJoystickTwo.getRawAxis(OIConstants.kDriverYAxis),
+              () -> driverJoystickTwo.getRawAxis(OIConstants.kRobotForwardAxis),
               () -> driverJoystickTwo.getRawButtonPressed(OIConstants.kLiftResetEncoderButton)));
     
     intakeSubsystem.setDefaultCommand(new SpinIntakeJoystickCmd(

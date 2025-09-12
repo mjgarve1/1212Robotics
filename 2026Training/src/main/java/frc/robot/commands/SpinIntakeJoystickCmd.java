@@ -33,10 +33,10 @@ public class SpinIntakeJoystickCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (speedInFunction.get() > OIConstants.kDeadband) {
+    if (speedInFunction.get() > OIConstants.kControllerAxisDeadband) {
       speed = -speedInFunction.get();
     }
-    else if (speedOutFunction.get() > OIConstants.kDeadband) {
+    else if (speedOutFunction.get() > OIConstants.kControllerAxisDeadband) {
       speed = speedOutFunction.get();
     }
     else{

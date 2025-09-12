@@ -40,7 +40,7 @@ public class LadderJoystickCmd extends Command {
     double speed = speedFunction.get();
 
     //2. apply deadband
-    speed = Math.abs(speed) > OIConstants.kDeadband ? speed : 0;
+    speed = Math.abs(speed) > OIConstants.kControllerAxisDeadband ? speed : 0;
 
     //3. Apply speed limit for up and down
     if (speed > 0)

@@ -82,9 +82,9 @@ public class SwerveJoystickCmd extends Command {
 
     // 3. Apply deadband
     // By applying deadband after limiter, we allow a smooth acceleration but immediate stop. This code was payed in blood.
-    xSpeed = Math.abs(xSpdFunction.get()) > OIConstants.kDeadband ? xSpeed : 0.0;
-    ySpeed = Math.abs(ySpdFunction.get()) > OIConstants.kDeadband ? ySpeed : 0.0;
-    turningSpeed = Math.abs(turningSpdFunction.get()) > OIConstants.kDeadband ? turningSpeed : 0.0;
+    xSpeed = Math.abs(xSpdFunction.get()) > OIConstants.kControllerAxisDeadband ? xSpeed : 0.0;
+    ySpeed = Math.abs(ySpdFunction.get()) > OIConstants.kControllerAxisDeadband ? ySpeed : 0.0;
+    turningSpeed = Math.abs(turningSpdFunction.get()) > OIConstants.kControllerAxisDeadband ? turningSpeed : 0.0;
     
 
     // 4. Construct desired chassis speeds

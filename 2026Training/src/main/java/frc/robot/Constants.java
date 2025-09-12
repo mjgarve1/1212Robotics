@@ -171,8 +171,7 @@ public final class Constants {
     public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
     public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond;
-    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 
-            kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
+    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = kPhysicalMaxSpeedMetersPerSecond;
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 5;
 
@@ -211,6 +210,7 @@ public final class Constants {
     public static final boolean kBackLeftDriveAbsoluteEncoderReversed = true;
     public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
     public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
+    
     //ZERO CANCODERS USING PHOENIX TUNER X INSTEAD
     public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0; //21
     public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 0; //20
@@ -218,87 +218,112 @@ public final class Constants {
     public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 0;  //22
   }
 
-  public static final class OIConstants {
+  /************************************************
+  Xbox Controller Mapping Constants
+  
+  Constants that go here:
+  Xbox controller buttons/axis values
+  ************************************************/
+  public static final class XboxControllerMappingConstants {
+    public static final int LEFT_STICK_X        = 0;
+    public static final int LEFT_STICK_Y        = 1;
+    public static final int RIGHT_STICK_X       = 4;
+    public static final int RIGHT_STICK_Y       = 5;
+    public static final int A                   = 1;
+    public static final int B                   = 2;
+    public static final int X                   = 3;
+    public static final int Y                   = 4;
+    public static final int LEFT_BUMPER         = 5;
+    public static final int RIGHT_BUMPER        = 6;
+    public static final int SELECT              = 7;
+    public static final int START               = 8;
+    public static final int LEFT_STICK_BUTTON   = 9;
+    public static final int RIGHT_STICK_BUTTON  = 10;
+
+    // This is tricky, Xbox controllers have variable triggers
+    // that are represented as an "axis", so in this particular
+    // case the triggers are mapped to moving the motor
+    // that controls the coral intake forwards or backwards.
+    // These triggers only ever go from 0->1 unlike the other
+    // joystick axis which go from -1->1
+    public static final int LEFT_TRIGGER  = 2;
+    public static final int RIGHT_TRIGGER = 3;
+
+    // Another tricky Xbox controller feature, the DPAD
+    // is not a set of 4 buttons, it is essentially
+    // a potentiometer that goes from 0->360 clockwise
+    // So when 0 is read that means up is pressed
+    // when 90 is read that means right is pressed
+    // when 180 is read that means down is pressed
+    // when 270 is read that means left is pressed
+    // This can also be read directly and you can get
+    // up-right being pressed if it reads 45 etc...
+    public static final int DPAD_UP     = 0;
+    public static final int DPAD_RIGHT  = 90;
+    public static final int DPAD_DOWN   = 180;
+    public static final int DPAD_LEFT   = 270;
+  }
+
+  /************************************************
+  Operator Interface (OI) Constants
+  
+  Constants that go here:
+  Controller Numbers
+  Detailed Button/Joystick Mappings
+  ************************************************/
+  public static final class OIConstants
+  {
+    //Not sure this is a good place for this...
+    public static final double kControllerAxisDeadband = 0.15;
+
+    //Controller Port Definitions
     public static final int kDriverControllerOnePort = 0;
     public static final int kDriverControllerTwoPort = 1;
 
-    //CHECK CONTROLLER VALUES
-    public static final int kDriverYAxis = 1;
-    public static final int kDriverXAxis = 0;
-    public static final int kDriverRotAxisXbox = 4;
-    public static final int kDriverRotAxisJoystick = 2;
-    public static final int kSpinIntakeInAxis = 2;
-    public static final int kSpinIntakeOutAxis = 3;
+    //Controller One Axis Definitions
+    public static final int kRobotForwardAxis   = XboxControllerMappingConstants.LEFT_STICK_Y;
+    public static final int kRobotSidewaysAxis  = XboxControllerMappingConstants.LEFT_STICK_X;
+    public static final int kRobotRotateAxis    = XboxControllerMappingConstants.RIGHT_STICK_X;
 
-
-    ///////////////////////buttons\\\\\\\\\\\\\\\\\
-    //////////////////////////Controller One\\\\\\\\\\\\\\\\\\\\\
-
-    //A
-    public static final int kResetGyroButton =1;
-    //Y
-    public static final int kFineTurningButton = 4;
-
-    //X
-    public static final int kDriverFieldOrientedButtonIdx = 3;
-
-    //LB
-    public static final int kClimberOut = 5;
-
-    //RB
-    public static final int kClimberIn = 6;
-
+    //Controller One Button Definitions
+    public static final int kResetGyroButton              = XboxControllerMappingConstants.A;
+    public static final int kFineTurningButton            = XboxControllerMappingConstants.Y;
+    public static final int kDriverFieldOrientedButtonIdx = XboxControllerMappingConstants.X;
+    public static final int kClimberOut                   = XboxControllerMappingConstants.LEFT_BUMPER;
+    public static final int kClimberIn                    = XboxControllerMappingConstants.RIGHT_BUMPER;
     
-    /////////////////////////////////Controller Two\\\\\\\\\\\\\\
-    //A
-    public static final int kLiftLowButton = 1;
-    
-    //B
-    public static final int kLiftMidButton = 2;
-    
-    //Y
-    public static final int kLiftHighButton = 4;
+    //Controller Two Axis Definitions
+    public static final int kSpinIntakeInAxis   = XboxControllerMappingConstants.LEFT_TRIGGER;
+    public static final int kSpinIntakeOutAxis  = XboxControllerMappingConstants.RIGHT_TRIGGER;
 
-    //X
-    public static final int kliftTroughButton = 3;
-
-    //RB
-    public static final int kIntakeInButton = 6;
-
-    //LB
-    public static final int kIntakeOutButton = 5;
-
-    //three lines
-    public static final int kLiftResetEncoderButton = 8;
-
-    //d-pad up
-    public static final int kIntakeInPad = 0;
-
-    //d-pad down
-    public static final int kIntakeOutPad = 180;
-
-    
-
-    
-    
-    public static final double kDeadband = 0.15;
-}
+    //Controller Two Button Definitions
+    public static final int kLiftLowButton          = XboxControllerMappingConstants.A;
+    public static final int kLiftMidButton          = XboxControllerMappingConstants.B;
+    public static final int kLiftHighButton         = XboxControllerMappingConstants.Y;
+    public static final int kliftTroughButton       = XboxControllerMappingConstants.X;
+    public static final int kIntakeInButton         = XboxControllerMappingConstants.RIGHT_BUMPER;
+    public static final int kIntakeOutButton        = XboxControllerMappingConstants.LEFT_BUMPER;
+    public static final int kLiftResetEncoderButton = XboxControllerMappingConstants.START;
+    public static final int kIntakeInPad            = XboxControllerMappingConstants.DPAD_UP;
+    public static final int kIntakeOutPad           = XboxControllerMappingConstants.DPAD_DOWN;
+  }
   
-public static final class AutoConstants{
-  //isn't used yet but it could be - J
-  public static boolean isCompetition = false;
+  public static final class AutoConstants
+  {
+    //isn't used yet but it could be - J
+    public static boolean isCompetition = false;
 
-  public static double kAutoTranslationP = 5.0;
-  public static double kAutoRotationP = 2.0;
+    public static double kAutoTranslationP = 5.0;
+    public static double kAutoRotationP = 2.0;
 
-  // private distance to calculate speed.
-  public static double kMidDriveForwardDistance = Units.inchesToMeters(75);
-  public static double kMidDriveForwardTime = 5.0;
-  public static double kMidDriveForwardSpeed = kMidDriveForwardDistance / kMidDriveForwardTime;
+    // private distance to calculate speed.
+    public static double kMidDriveForwardDistance = Units.inchesToMeters(75);
+    public static double kMidDriveForwardTime = 5.0;
+    public static double kMidDriveForwardSpeed = kMidDriveForwardDistance / kMidDriveForwardTime;
 
-  public static double kLeftDriveForwardDistance = Units.inchesToMeters(61.0);
-  public static double kLeftDriveForwardTime = 5.0;
-  public static double kLeftDriveForwardSpeed = kLeftDriveForwardDistance / kLeftDriveForwardTime;
-}
+    public static double kLeftDriveForwardDistance = Units.inchesToMeters(61.0);
+    public static double kLeftDriveForwardTime = 5.0;
+    public static double kLeftDriveForwardSpeed = kLeftDriveForwardDistance / kLeftDriveForwardTime;
+  }
 }
 //https://software-metadata.revrobotics.com/REVLib-2025.json
