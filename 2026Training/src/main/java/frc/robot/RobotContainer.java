@@ -78,11 +78,10 @@ public class RobotContainer {
     // Probably some improvement here since I think the buttons do not give up control when they are no longer pressed
     ladderSubsystem.setDefaultCommand(new LadderJoystickCmd(
               ladderSubsystem, 
-              () -> driverJoystickTwo.getRawAxis(OIConstants.kRobotForwardAxis),
+              () -> driverJoystickTwo.getRawAxis(OIConstants.kLadderAxis),
               () -> driverJoystickTwo.getRawButtonPressed(OIConstants.kLiftResetEncoderButton)));
     
     // Hook up the coral intake to take in joystick as long as no other command is currently executing
-    // Probably some improvement here as above....
     intakeSubsystem.setDefaultCommand(new SpinIntakeJoystickCmd(
               intakeSubsystem, 
               () -> driverJoystickTwo.getRawAxis(OIConstants.kSpinIntakeOutAxis),
@@ -132,10 +131,10 @@ public class RobotContainer {
     // Controller One Button Mapping
 
     // While the button is pressed, move the climb arm in towards the middle of the robot
-    new JoystickButton(driverJoystickOne, OIConstants.kClimberIn).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbInSpeed, ClimbConstants.kClimbInStop));
+    new JoystickButton(driverJoystickOne, OIConstants.kClimberIn).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbInSpeed));
 
     // While the button is pressed, move the climb arm out away from the robot to climb
-    new JoystickButton(driverJoystickOne, OIConstants.kClimberOut).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbOutSpeed, ClimbConstants.kOutStop));
+    new JoystickButton(driverJoystickOne, OIConstants.kClimberOut).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbOutSpeed));
 
     // While this button is pressed, reset the gyro used to tell the robot which direction is forward
     // Likely a suspect in robot orientation setup.....
@@ -144,17 +143,17 @@ public class RobotContainer {
     // Controller Two Button Mapping
     
     // When this button is pressed, send the ladder to lowest, low, mid, top scoring positions
-    // Note: These are TOGGLE, so pressing a button will hold the position permanently
+    // Note: These are TOGGLE, so pressing a button will hold the position until the next button press
     //       This may end up disabling joystick control, probably room for improvement here.
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftHighButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint));
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftMidButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftMidSetPoint));
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftLowButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint));
-    new JoystickButton(driverJoystickTwo, OIConstants.kliftTroughButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftTroughSetPoint));
+    new JoystickButton(driverJoystickTwo, OIConstants.kLiftHighButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton)));
+    new JoystickButton(driverJoystickTwo, OIConstants.kLiftMidButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftMidSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton)));
+    new JoystickButton(driverJoystickTwo, OIConstants.kLiftLowButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton)));
+    new JoystickButton(driverJoystickTwo, OIConstants.kliftTroughButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftTroughSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton)));
 
-    // While this button is pressed move the coral from the middle of the robot out at a constant fixed rate
+    // Probably can remove this one, its pretty redundant compared to the triggers (default intakeSubsystem command)
     new JoystickButton(driverJoystickTwo, OIConstants.kIntakeInButton).whileTrue(new SpinIntakeCmd(intakeSubsystem, IntakeConstants.kIntakeSpeed));
 
-    //While this button is pressed move the coral from the outside of the robot towards the middle at a fixed constant rate
+    // While this button is pressed move the coral from the middle of the robot out until the coral is no longer sensed.
     new JoystickButton(driverJoystickTwo, OIConstants.kIntakeOutButton).whileTrue(new CoralSenseIntakeCmd(intakeSubsystem));
   }
 

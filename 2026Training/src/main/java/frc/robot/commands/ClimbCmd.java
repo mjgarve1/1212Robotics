@@ -12,8 +12,7 @@ public class ClimbCmd extends Command {
   /** Creates a new ClimbCmd. */
   private ClimbSubsystem climbSubsystem;
   private double speed;
-  public ClimbCmd(ClimbSubsystem climbSubsystem, double speed , double setPoint) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public ClimbCmd(ClimbSubsystem climbSubsystem, double speed) {
     this.climbSubsystem = climbSubsystem;
     this.speed = speed;
 
@@ -39,12 +38,6 @@ public class ClimbCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    /*
-    if((isAbove && climbSubsystem.getClimbEncoder() <= setPoint)
-    || (!isAbove && climbSubsystem.getClimbEncoder() >= setPoint)){
-      return true;
-    }
-     */
     return false;
   }
 }

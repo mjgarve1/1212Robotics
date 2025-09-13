@@ -5,6 +5,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.LadderConstants;
@@ -16,19 +19,16 @@ public class LadderMove extends Command {
   private final PIDController m_PidController;
 
   private final double setPoint;
+  private final Supplier<Boolean> unlockLadderSupplier;
 
   //private final Supplier<Boolean> changeOffsetfx;
 
-  public LadderMove(LadderSubsystem ladderSub, double setPoint) {
+  public LadderMove(LadderSubsystem ladderSub, double setPoint, Supplier<Boolean> unlockLadderSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.ladderSub = ladderSub;
     this.setPoint = setPoint;
-    this.m_PidController = new PIDController(LadderConstants.kLiftPVal, LadderConstants.kLiftIVal, LadderConstants.kLiftDVal);
-   // m_PidController.setSetpoint(this.setPoint + LadderSubsystem.getOffset());
-
-
-    
-    
+    this.m_PidController = new PIDController(LadderConstants.kLiftPVal, LadderConstants.kLiftIVal, LadderConstants.kLiftDVal);    
+    this.unlockLadderSupplier = unlockLadderSupplier;
     addRequirements(ladderSub);
 
   }
@@ -42,9 +42,6 @@ public class LadderMove extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    //ladderSub.setLastPoint(setPoint+ LadderSubsystem.getOffset());
-
     double speed = m_PidController.calculate(ladderSub.getLiftEncoder());
 
     ladderSub.driveLift(speed);
@@ -64,6 +61,7 @@ public class LadderMove extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // If the button is pressed, cancel the hold
+    return unlockLadderSupplier.get();
   }
 }

@@ -109,9 +109,6 @@ public final class Constants {
     public static double kClimbOutSpeed = 0.5;
     public static double kClimbInSpeed = -0.5;
 
-    public static double kClimbInStop = 0;
-    public static double kOutStop = 0;
-
     public static double kClimbPVal = 5;
     public static double kClimbIVal = 5;
     public static double kclimbDVal = 0.2;
@@ -293,6 +290,7 @@ public final class Constants {
     public static final int kClimberIn                    = XboxControllerMappingConstants.RIGHT_BUMPER;
     
     //Controller Two Axis Definitions
+    public static final int kLadderAxis         = XboxControllerMappingConstants.LEFT_STICK_Y;
     public static final int kSpinIntakeInAxis   = XboxControllerMappingConstants.LEFT_TRIGGER;
     public static final int kSpinIntakeOutAxis  = XboxControllerMappingConstants.RIGHT_TRIGGER;
 
@@ -304,6 +302,7 @@ public final class Constants {
     public static final int kIntakeInButton         = XboxControllerMappingConstants.RIGHT_BUMPER;
     public static final int kIntakeOutButton        = XboxControllerMappingConstants.LEFT_BUMPER;
     public static final int kLiftResetEncoderButton = XboxControllerMappingConstants.START;
+    public static final int kUnlockLadderButton     = XboxControllerMappingConstants.SELECT;
     public static final int kIntakeInPad            = XboxControllerMappingConstants.DPAD_UP;
     public static final int kIntakeOutPad           = XboxControllerMappingConstants.DPAD_DOWN;
   }
