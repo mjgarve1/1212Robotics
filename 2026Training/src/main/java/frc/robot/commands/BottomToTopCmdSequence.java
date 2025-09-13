@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.LadderConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.LadderSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -21,10 +22,10 @@ public class BottomToTopCmdSequence extends SequentialCommandGroup {
     //Creates a soft stopping point to prevent slamming into top when going from bottom
     if (this.ladderSubsystem.getLiftEncoder() < LadderConstants.kLiftTroughSetPoint) {
       addCommands(new LadderMoveAuto(ladderSubsystem, LadderConstants.kLiftTroughSetPoint), 
-      new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint));
+      new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint, () -> false));
     }
     else{
-      addCommands(new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint));
+      addCommands(new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint, () -> false));
     }
   }
 }

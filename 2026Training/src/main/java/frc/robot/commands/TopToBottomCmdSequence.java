@@ -23,10 +23,10 @@ public class TopToBottomCmdSequence extends SequentialCommandGroup {
     
     if (this.ladderSubsystem.getLiftEncoder() > LadderConstants.kLiftTroughSetPoint) {
       addCommands(new LadderMoveAuto(ladderSubsystem, LadderConstants.kLiftTroughSetPoint),
-      new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint));
+      new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint, () -> false));
     }
     else{
-      addCommands(new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint));
+      addCommands(new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint, () -> false));
     }
   }
 }
