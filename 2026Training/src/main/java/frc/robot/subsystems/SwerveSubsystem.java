@@ -71,8 +71,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
          //creates a navX gyro to use in da calcs
     private final AHRS gyro = new AHRS(AHRS.NavXComType.kMXP_SPI, AHRS.NavXUpdateRate.k50Hz);
-    
-    // private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     //throughout, poseEstimator is used for odometry but the odometer is used to get the initial pose I guess
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,new Rotation2d(0),

@@ -34,9 +34,6 @@ public final class Autos {
   //
   public static Command middleAuto(SwerveSubsystem swerveSubsystem, IntakeSubsystem intakeSubsystem){
        return Commands.sequence(
-        //new AutoDriveCmd(swerveSubsystem, AutoConstants.kMidDriveForwardSpeed, 0, 0).withTimeout(AutoConstants.kMidDriveForwardTime),
-        //new AutoDriveCmd(swerveSubsystem, 1, 0, 0).withTimeout(2),
-        //swerveSubsystem.driveTowardAprilTag(),
         new AutoDriveStraightCmd(swerveSubsystem, 1, 0).withTimeout(3.5),
         new StopSwerveCmd(swerveSubsystem).withTimeout(0.1),
         new SpinIntakeCmd(intakeSubsystem, IntakeConstants.kIntakeSpeed).withTimeout(2)
