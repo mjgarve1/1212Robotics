@@ -16,19 +16,21 @@ import frc.robot.subsystems.LadderSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class LadderMove extends Command {
   private final LadderSubsystem ladderSub;
-  private final PIDController m_PidController;
+  private PIDController m_PidController;
 
-  private final double setPoint;
+  private double setPoint;
   private final Supplier<Boolean> unlockLadderSupplier;
+  private final Supplier<Double> setPointSupplier;
 
   //private final Supplier<Boolean> changeOffsetfx;
 
-  public LadderMove(LadderSubsystem ladderSub, double setPoint, Supplier<Boolean> unlockLadderSupplier) {
+  public LadderMove(LadderSubsystem ladderSub, double setPoint, Supplier<Boolean> unlockLadderSupplier, Supplier<Double> setPointSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.ladderSub = ladderSub;
     this.setPoint = setPoint;
     this.m_PidController = new PIDController(LadderConstants.kLiftPVal, LadderConstants.kLiftIVal, LadderConstants.kLiftDVal);    
     this.unlockLadderSupplier = unlockLadderSupplier;
+    this.setPointSupplier = setPointSupplier;
     addRequirements(ladderSub);
 
   }
@@ -36,6 +38,8 @@ public class LadderMove extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    setPoint = setPointSupplier.get();
+    this.m_PidController = new PIDController(SmartDashboard.getNumber("Ladder P", LadderConstants.kLiftPVal), SmartDashboard.getNumber("Ladder I", LadderConstants.kLiftIVal), SmartDashboard.getNumber("Ladder D", LadderConstants.kLiftDVal)); 
     m_PidController.setSetpoint(this.setPoint + LadderSubsystem.getOffset());
   }
 
@@ -45,11 +49,6 @@ public class LadderMove extends Command {
     double speed = m_PidController.calculate(ladderSub.getLiftEncoder());
 
     ladderSub.driveLift(speed);
-    SmartDashboard.putNumber("speed", speed);
-    SmartDashboard.putNumber("Setpoint", setPoint);
-    
-    SmartDashboard.putNumber("Setpoint offset", LadderSubsystem.getOffset());
-    SmartDashboard.putNumber("Error", m_PidController.getError());
   }
 
   // Called once the command ends or is interrupted.

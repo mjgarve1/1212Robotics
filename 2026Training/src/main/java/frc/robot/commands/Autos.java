@@ -20,7 +20,6 @@ public final class Autos {
   //
   public static Command testAuto(SwerveSubsystem swerveSubsystem, IntakeSubsystem intakeSubsystem){
     return Commands.sequence(
-      //new ResetGyroCmd(swerveSubsystem),
       new AutoDriveCmd(swerveSubsystem, 01, 0, 0).withTimeout(2),
       new StopSwerveCmd(swerveSubsystem).withTimeout(2),
       new AutoDriveCmd(swerveSubsystem, 0, 0, 2).withTimeout(2),

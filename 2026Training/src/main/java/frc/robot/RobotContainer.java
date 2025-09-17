@@ -116,6 +116,15 @@ public class RobotContainer {
     // Lets fix everything else before we touch this....
     PathfindingCommand.warmupCommand().schedule();
 
+    //Add in the ability to tune the ladder
+    SmartDashboard.putNumber("Top Coral Ladder", LadderConstants.kLiftHighSetPoint);
+    SmartDashboard.putNumber("Middle Coral Ladder", LadderConstants.kLiftMidSetPoint);
+    SmartDashboard.putNumber("Bottom Coral Ladder", LadderConstants.kLiftLowSetPoint);
+    SmartDashboard.putNumber("Trough Coral Ladder", LadderConstants.kLiftTroughSetPoint);
+    SmartDashboard.putNumber("Ladder P", LadderConstants.kLiftPVal);
+    SmartDashboard.putNumber("Ladder I", LadderConstants.kLiftIVal);
+    SmartDashboard.putNumber("Ladder D", LadderConstants.kLiftDVal);
+
     // Configure button mapping
     configureBindings();
   }
@@ -145,10 +154,10 @@ public class RobotContainer {
     // When this button is pressed, send the ladder to lowest, low, mid, top scoring positions
     // Note: These are TOGGLE, so pressing a button will hold the position until the next button press
     //       This may end up disabling joystick control, probably room for improvement here.
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftHighButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton)));
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftMidButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftMidSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton)));
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftLowButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton)));
-    new JoystickButton(driverJoystickTwo, OIConstants.kliftTroughButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftTroughSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton)));
+    new JoystickButton(driverJoystickTwo, OIConstants.kLiftHighButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Top Coral Ladder", LadderConstants.kLiftHighSetPoint)));
+    new JoystickButton(driverJoystickTwo, OIConstants.kLiftMidButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftMidSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Middle Coral Ladder", LadderConstants.kLiftMidSetPoint)));
+    new JoystickButton(driverJoystickTwo, OIConstants.kLiftLowButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Bottom Coral Ladder", LadderConstants.kLiftLowSetPoint)));
+    new JoystickButton(driverJoystickTwo, OIConstants.kliftTroughButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftTroughSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Trough Coral Ladder", LadderConstants.kLiftTroughSetPoint)));
 
     // Probably can remove this one, its pretty redundant compared to the triggers (default intakeSubsystem command)
     new JoystickButton(driverJoystickTwo, OIConstants.kIntakeInButton).whileTrue(new SpinIntakeCmd(intakeSubsystem, IntakeConstants.kIntakeSpeed));
