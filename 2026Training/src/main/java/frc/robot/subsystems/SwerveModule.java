@@ -45,47 +45,72 @@ public class SwerveModule extends SubsystemBase {
 
   public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
     int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+      
+      // Initialize the drive and rotation motors
       config = new SparkMaxConfig();
       this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
       this.absoluteEncoderReversed = absoluteEncoderReversed;
-
       this.absoluteEncoder = new CANcoder(absoluteEncoderId);
-
-
       driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
       turningMotor = new SparkMax(turningMotorId, MotorType.kBrushless);
       this.turningMotorId = turningMotorId;
-
       driveEncoder = driveMotor.getEncoder();
       turningEncoder = turningMotor.getEncoder();
-      //resetEncoders();
 
+      // Configure drive motor
       config
-        .inverted(driveMotorReversed)
-        .idleMode(IdleMode.kBrake);
+        .inverted(driveMotorReversed) // Set direction
+        .idleMode(IdleMode.kBrake); // Set motor to stop when not being commanded to move
       config.encoder
-        .positionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter)
-        .velocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-      
-      driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  
+        .positionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter) // How far each rotation of the motor moves the robot, used to track actual distance travelled
+        .velocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec); // How fast the robot moves when the motor is spinning, used to determine how fast the robot moves/is moving
+      driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  // Write the configuration
 
+      // Configure rotation motor
       config
-        .inverted(turningMotorReversed)
-        .idleMode(IdleMode.kCoast);
+        .inverted(turningMotorReversed) // Set direction
+        .idleMode(IdleMode.kCoast); // Set motor to keep moving when not being actively driven
       config.encoder
-        .positionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad)
-        .velocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
-      config.closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .pid(ModuleConstants.kPTurning, 0, 0);
+        .positionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad) // Convert motor encoder position to angle of the wheel
+        .velocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec); // Convert how fast the angle of the wheel is changing
       turningMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       
+      // The Rotation Motor is meant to drive to a desired position, not a desired speed
+      // Due to this, we need to set up a PID controller that goes from -pi to pi (full circle)
       turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
       turningPidController.enableContinuousInput(-Math.PI, Math.PI);
       
       resetEncoders();
       
+    }
+
+    public void setDesiredState(SwerveModuleState state){
+      // If it is supposed to be driving close to 0, just full stop everything
+      if(Math.abs(state.speedMetersPerSecond)<0.001){
+          stop();
+          return;
       }
+
+      // Optimize the angle to the nearest 180, for example:
+      // If the wheel is currently facing directly right and the new command is to go directly left
+      // Then there is no need to change the angle of the wheel, just reverse the direction
+      // of the drive motor.  A backwards right is the same as a forwards left.  This
+      // can be applied to all directions, so this will ensure the wheels never have to turn more than 90
+      // degress to get to where they need to be
+      state.optimize( getState().angle);
+
+      // Drive the motor at the specified speed.  Motors take speeds from -1 to 1 as a double
+      // So, if the motors at 100% go at X m/s, to go Y m/s you have to divide Y/X to get the range to -1 to 1.
+      driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+
+      // Turn the motor to the desired position using the PID defined above using the current wheel position
+      // and the desired wheel position.  Tuning this will help the robot drive different directions better.
+      turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+      
+      // Write out what the wheels should be targeting
+      SmartDashboard.putString("Swerve[" + turningMotorId+"] state", state.toString());
+
+    }
 
       //gets drive encoder position in meters
     public double getDrivePosition(){
@@ -148,28 +173,7 @@ public class SwerveModule extends SubsystemBase {
     public SwerveModuleState getState(){
         //creates a current state from the current drive velocity and turning position
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));    
-    }
-    
-    public void setDesiredState(SwerveModuleState state){
-        //does not set a state if there is no speed in the new state
-        //need to test to see if this makes it so it can coast
-        if(Math.abs(state.speedMetersPerSecond)<0.001){
-            stop();
-            return;
-        }
-        //optimize makes it so that the wheel only has to turn a max of 90 degrees at a time
-        //uses both directions of drive motor instead of just forward
-        state.optimize( getState().angle);
-        //sets the driveMotor speed and scale down using physical max meters per second of the motor
-        driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        //sets the turningMotor position useing a pid controller with inputs of the current position of turning motor
-        //combined with the desired position
-        turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-        // ???
-        SmartDashboard.putString("Swerve[" + turningMotorId+"] state", state.toString());
-
-    }
-    
+    }    
     //stop
     public void stop(){
         driveMotor.set(0);

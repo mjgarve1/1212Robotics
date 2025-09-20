@@ -155,10 +155,21 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(15.5);
     // Distance between front and back wheels
     public static final double kWheelBase = Units.inchesToMeters(26.0);
+    
+    // X, Y positions of the wheels relative to the center of the robot
+    // The order this is defined is the order that states are returned to us
+    // Order goes: Front Left, Front Right, Back Left, Back Right
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+      // Front Left Wheel, Negative X, Positive Y
       new Translation2d(-kTrackWidth / 2, kWheelBase / 2),
+
+      // Front Right Wheel, Positive X, Positive Y
       new Translation2d(kTrackWidth/ 2, kWheelBase / 2),
+
+      //Back Left Wheel, Negative X, Negative Y
       new Translation2d(-kTrackWidth / 2, -kWheelBase / 2),
+
+      // Back Right Wheel, Positive X, Negative Y
       new Translation2d(kTrackWidth / 2, -kWheelBase / 2)
       );
 

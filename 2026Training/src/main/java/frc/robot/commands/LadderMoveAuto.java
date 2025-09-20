@@ -47,13 +47,9 @@ public class LadderMoveAuto extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ladderSub.setLastPoint(setPoint);
     double speed = m_PidController.calculate(ladderSub.getLiftEncoder());
 
     ladderSub.driveLift(speed);
-    SmartDashboard.putNumber("speed", speed);
-    SmartDashboard.putNumber("Setpoint", setPoint);
-    SmartDashboard.putNumber("Error", m_PidController.getError());
   }
 
   // Called once the command ends or is interrupted.

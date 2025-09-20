@@ -51,16 +51,6 @@ public class SwerveJoystickCmd extends Command {
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
-/* 
-// potential solution to an unknown problem, probably won't be needed.
-    if(DriverStation.getAlliance().equals(Alliance.Blue)){
-      xSpeed = -xSpeed;
-      ySpeed = -ySpeed;
-      turningSpeed = -turningSpeed;
-    }
-     */
-
-    
 
     //Toggles fine Driving
     if (fineDrivingFunction.get() &&  !previousFineDrivingState){ 

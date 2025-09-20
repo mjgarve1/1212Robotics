@@ -69,31 +69,32 @@ public class SwerveSubsystem extends SubsystemBase {
         DriveConstants.kBackRightDriveAbsoluteEncoderReversed
         );
 
-         //creates a navX gyro to use in da calcs
+    // Gyro to monitor the heading of the robot
     private final AHRS gyro = new AHRS(AHRS.NavXComType.kMXP_SPI, AHRS.NavXUpdateRate.k50Hz);
 
-    //throughout, poseEstimator is used for odometry but the odometer is used to get the initial pose I guess
+    //Set up initial Odometry
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,new Rotation2d(0),
         new SwerveModulePosition[]{frontLeft.getPosition(),frontRight.getPosition(),backLeft.getPosition(),backRight.getPosition()});
 
+    // Since we do not have feedback from the motors as to exactly the speed and heading, we have to estimate it
+    // This sets up the estimator
     private final SwerveDrivePoseEstimator m_poseEstimator =
       new SwerveDrivePoseEstimator(
           DriveConstants.kDriveKinematics,
-          gyro.getRotation2d(),
+          new Rotation2d(0),
           new SwerveModulePosition[] {
             frontLeft.getPosition(),
             frontRight.getPosition(),
             backLeft.getPosition(),
             backRight.getPosition()
           }, odometer.getPoseMeters());
+
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0,0,0);
     private RobotConfig config;
 
     
   public SwerveSubsystem() {
     //used to link odometry with limelight for better pose estimation.
-   
-    //CameraServer.addCamera(null);
     LimelightHelpers.SetIMUMode("limelight", 2);
 
     new Thread(() -> {

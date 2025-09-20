@@ -14,34 +14,15 @@ import frc.robot.Constants.LadderConstants;
 
 
 public class LadderSubsystem extends SubsystemBase {
-  /** Creates a new LadderSubsystem. */
 
-  //coded as brushless can code as brushed if neccesary.
-  //private final SparkMax liftMotor = new SparkMax(LadderConstants.kLiftMotorPort, MotorType.kBrushless);
-  //private final RelativeEncoder liftEncoder = liftMotor.getEncoder();
-  //
-  //Currently brushed, easy af to change - J
-  private final SparkMax liftMotor;
-  //private final RelativeEncoder liftEncoder;
-  
+  private final SparkMax liftMotor;  
   private Encoder liftEncoder;
-  private double lastSetPoint;
   private static double offset;
   public LadderSubsystem() {
     liftMotor = new SparkMax(LadderConstants.kLiftMotorPort, MotorType.kBrushless);
 
     liftEncoder =  new Encoder(1, 2);
-
-    
-    //liftEncoder = liftMotor.getAlternateEncoder();
-    /* 
-    config = new SparkMaxConfig();
-    config
-      .smartCurrentLimit(40, 40)
-      .idleMode(IdleMode.kCoast);
-    liftMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);  
-   */ lastSetPoint = 0;
-   offset = getLiftEncoder();
+    offset = getLiftEncoder();
   }
 
   public void driveLift(double speed){
@@ -57,12 +38,9 @@ public class LadderSubsystem extends SubsystemBase {
   public static void setOffset(double off){
     offset = off;
   }
+
   public static double getOffset(){
     return offset;
-  }
-  public double getLastSetPoint(){return lastSetPoint;}
-  public void setLastPoint(double setPoint){
-    lastSetPoint = setPoint;
   }
 
   public void resetEncoder(){
@@ -71,11 +49,10 @@ public class LadderSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Height", getLiftEncoder());
+    SmartDashboard.putNumber("Ladder Height", getLiftEncoder());
     
-    SmartDashboard.putNumber("offset", getOffset());
+    SmartDashboard.putNumber("Ladder Offset", getOffset());
     
-    
-    SmartDashboard.putNumber("LadderCurrent", liftMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Ladder Power", liftMotor.getOutputCurrent());
   }
 }
