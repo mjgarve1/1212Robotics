@@ -1,0 +1,3 @@
+[submodule "SwerveExample"]
+	path = SwerveExample
+	url = https://github.com/FRC2495/FRC2495-2023-Swerve.git
