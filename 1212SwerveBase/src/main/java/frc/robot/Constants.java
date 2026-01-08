@@ -19,56 +19,28 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static class ModuleConstants {
+    // Individual swerve drive module parameters:
+    // Diameter of the wheels
+    // Gear ratio of the drive motor
+    // Gear ratio of the turning motor
+    // Calculation of how many rotations of the drive motor corresponds to actual distance travelled
+    //    One motor shaft rotation = 1/6.75 rotations of the wheel, or the circumference of a circle that is 4 inches in diameter
+    // Calculation of how fast a rotation of the turning motor can change the angular direction of the wheel
+    //    One motor shaft rotation = 1/(150/7) change in direction, which is a full circle in radians
+    // Calculation of what the velocity can be calculated, in meters per second
+    //    Divide the motor movement by 60 seconds since motor measurment is revolutions per minute, so the distance travelled 
+    //    per motor revolution divided by 60 seconds per minute gets a translation of revolutions per second to positional velocity
+    // Calculation of how fast the wheel is turning, in radians per second
+    //    Divide the motor movement by 60 seconds since motor measurment is revolutions per minute, so the rotation travelled 
+    //    per motor revolution divided by 60 seconds per minute gets a translation of revolutions per second to rotational velocity
     public static double kWheelDiameterMeters = Units.inchesToMeters(4);
-
     public static final double kDriveMotorGearRatio = 1/6.75;
     public static final double kTurningMotorGearRatio = (1/(150.0/7));    
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-    //Used as position conversion factor
     public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;    
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter/60;
-    public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad/60;
-    //wtf this do
-    //its our p term for the pid for turning - J
-    public static final double kPTurning = 0.3;
-    
+    public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad/60;    
   }
-
-  // public static class LimelightConstants{
-  //   /*
-  //   /Height in meters
-  //   /when using april tags for distance, all units should be in meters - J
-  //   / Coral Station ID: 1, 2, 12, 13 1.35 meters
-  //   / Processor ID: 3, 16 1.17 m
-  //   / Reef ID: 6 - 11, 17-22 .17 m
-  //   / Barge ID: 4, 5, 14, 15 1.78 m
-  //   */
-  //   private static double[] kAprilTagHeight = {
-  //     0, //indexing starts at 0, so we just skip that in the array. - J
-  //     1.35, //1 
-  //     1.35, //2
-  //     1.17, //3
-  //     1.78, //4
-  //     1.78, //5
-  //     .17, //6
-  //     .17, //7
-  //     .17, //8
-  //     .17, //9
-  //     .17, //10
-  //     .17, //11
-  //     1.35, //12
-  //     1.35, //13
-  //     1.78, //14
-  //     1.78, //15
-  //     1.17, //16
-  //     .17, //17
-  //     .17, //18
-  //     .17, //19
-  //     .17, //20
-  //     .17, //21
-  //     .17, //22
-  //   };
-  // }
 
   public static class DriveConstants{
     // Distance between right and left wheels, the Y axis
@@ -107,6 +79,8 @@ public final class Constants {
     // The maximum acceleartion or deceleration the orientation of the wheels should have (how long does it take for the wheel to reach maximum rotational speed)
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 5;
 
+    // PID values to determine how hard to drive the robot movement wheels to get to the desired speed and direction
+    // Probably need to tune this to make it smoother
     public static final double kDriveP = 0.04;
     public static final double kDriveI = 0.0;
     public static final double kDriveD = 0.0;
@@ -122,13 +96,13 @@ public final class Constants {
     public static final double kFineTurning = 3;
     
     // Swerve module information:
-    // Port for movement motor
-    // Reversed movement encoder?
-    // Port for rotation motor
-    // Reversed rotation encoder?
-    // Port for absolute encoder
-    // Absolute encoder reversed?
-    // Absolute encoder offset (should be 0 thanks to Phoenix Tuner X)
+    //  Port for movement motor
+    //  Reversed movement encoder?
+    //  Port for rotation motor
+    //  Reversed rotation encoder?
+    //  Port for absolute encoder
+    //  Absolute encoder reversed?
+    //  Absolute encoder offset (should be 0 thanks to Phoenix Tuner X)
 
     public static final int     kFrontLeftDriveMotorPort                  = 11;
     public static final boolean kFrontLeftDriveEncoderReversed            = false;

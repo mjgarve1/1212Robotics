@@ -4,14 +4,10 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ResetGyroCmd;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -25,10 +21,6 @@ public class RobotContainer {
 
   // Swerve drive (wheel motors) subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-
-  // Autonomous robot control configuration
-  private final SendableChooser<Command> autosChooser;
-  private final Command midAuto;
   
   // Controller input configuration
   private final Joystick driverJoystickOne = new Joystick(OIConstants.kDriverControllerOnePort);
@@ -49,22 +41,6 @@ public class RobotContainer {
               () -> !driverJoystickOne.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
               () -> driverJoystickOne.getRawButton(OIConstants.kFineTurningButton)));
 
-    // Set up autonomous mode to be able to do something
-    // Lets fix everything else before we touch this....
-    autosChooser = new SendableChooser<>();
-    midAuto = Autos.middleAuto(swerveSubsystem);
-
-    // Default to Middle Auto, which works out to drive the robot forward
-    autosChooser.setDefaultOption("Middle Auto", midAuto);
-
-    // Add the ability to swap these around (useful in competition to choose
-    // a different autonomous operation depending on starting position)
-    SmartDashboard.putData("Autos Chooser", autosChooser);    
-   
-    // Pathfinder
-    // Lets fix everything else before we touch this....
-    PathfindingCommand.warmupCommand().schedule();
-
     // Configure button mapping
     configureBindings();
   }
@@ -78,8 +54,6 @@ public class RobotContainer {
   private void configureBindings()
   {
     // Controller One Button Mapping
-    // While this button is pressed, reset the gyro used to tell the robot which direction is forward
-    // Likely a suspect in robot orientation setup.....
     new JoystickButton(driverJoystickOne, OIConstants.kResetGyroButton).whileTrue(new ResetGyroCmd(swerveSubsystem));
 
   }
@@ -91,7 +65,6 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() {
-    // Return the default autonomous command defined above
-    return autosChooser.getSelected();
+    return null;
   }
 }

@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.pathplanner.lib.config.RobotConfig;
 import com.studica.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -86,19 +85,18 @@ public class SwerveSubsystem extends SubsystemBase {
     public double getHeadingRadians(){
       return Units.degreesToRadians(getHeading());
     }
+
     //returns as rotation2d object (in radians)
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getHeading());
     }
 
     //returns Pose with x,y, and theta coordinates of robot
-    // now uses poseEstimator because of limeLight compatability.
     public Pose2d getPose(){
         return odometer.getPoseMeters();
     }
 
     //We moved the use of Chassis Speeds from our Swerve Joystick Command to our Swerve Subsytem
-    //This will be seen in setModuleStates and in driveRobotRelative (Which is just used for auto currently)
     public void setChassisSpeed( ChassisSpeeds speed){
         chassisSpeeds = speed;
     }
@@ -106,8 +104,8 @@ public class SwerveSubsystem extends SubsystemBase {
     //gets the chassis speeds relative the robot - J
     public ChassisSpeeds getRobotRelativeSpeeds(){
         return ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, getRotation2d());
-        //return ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, Rotation2d.fromDegrees(-getHeading()));
     }
+
     //reset the odometer current theta, module positions
     public void resetPose(Pose2d newPose){
       odometer.resetPosition(
@@ -122,6 +120,7 @@ public class SwerveSubsystem extends SubsystemBase {
         
     }
 
+    // Update the position of the robot according to the direction it is heading and how fast the wheels are moving compared to last time it was updated
     public void updateOdometry() {
       odometer.update(
         getRotation2d(),
@@ -147,16 +146,6 @@ public class SwerveSubsystem extends SubsystemBase {
      //SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
      //SmartDashboard.putNumber("Robot heading", getHeadingRadians());    
   }
-
-public void driveRobotRelative(ChassisSpeeds robotRelativeSpeed){
-    SwerveModuleState[] desiredStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeed, getRotation2d()));
-  SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-
-  frontLeft.setDesiredState(desiredStates[0]);
-  frontRight.setDesiredState(desiredStates[1]);
-  backLeft.setDesiredState(desiredStates[2]);
-  backRight.setDesiredState(desiredStates[3]);
-}
 
 public void setModuleStates() {
 

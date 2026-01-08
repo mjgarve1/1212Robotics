@@ -82,10 +82,14 @@ public class SwerveJoystickCmd extends Command {
     ChassisSpeeds chassisSpeeds;
     if (fieldOrientedFunction.get()) {
         // Relative to field
+        // Essentially telling the robot to move forward will always move the robot away from you if you are sitting in a driver station position
+        // Telling the robot to move forward, even if the robot is directly facing you, or is rotated at some weird angle, will still move the robot away from you
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     } else {
         // Relative to robot
+        // Essentially telling the robot to move forward sitting directly behind the robot will tell the robot to move directly away from you.
+        // Telling the robot to move forward when the front of the robot is facing you will move the robot towards you
         chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
     }
 
