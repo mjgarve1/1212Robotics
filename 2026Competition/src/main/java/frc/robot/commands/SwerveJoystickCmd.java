@@ -50,7 +50,7 @@ public class SwerveJoystickCmd extends Command {
         previousFineDrivingState = false;
         fineDrivingState = false;
         addRequirements(swerveSubsystem);
-        turningPidController = new PIDController(1.0, 0.2, 0);
+        turningPidController = new PIDController(0.5, 0.1, 0);
         turningPidController.enableContinuousInput(-180.0, 180.0);
   }
 
