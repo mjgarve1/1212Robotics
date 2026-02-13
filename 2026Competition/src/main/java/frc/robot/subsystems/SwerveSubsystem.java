@@ -72,7 +72,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // Gyro to monitor the heading of the robot
     private final AHRS gyro = new AHRS(AHRS.NavXComType.kMXP_SPI, AHRS.NavXUpdateRate.k50Hz);
 
-    //Set up initial Odometry
+    //Set up initial Odometry 
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,new Rotation2d(0),
         new SwerveModulePosition[]{frontLeft.getPosition(),frontRight.getPosition(),backLeft.getPosition(),backRight.getPosition()});
 
