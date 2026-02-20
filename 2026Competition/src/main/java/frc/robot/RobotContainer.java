@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+//hello
 
 package frc.robot;
 
@@ -10,22 +10,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LadderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ClimbCmd;
-import frc.robot.commands.CoralSenseIntakeCmd;
-import frc.robot.commands.LadderJoystickCmd;
-import frc.robot.commands.LadderMove;
-import frc.robot.commands.LadderMoveAuto;
 import frc.robot.commands.ResetGyroCmd;
 import frc.robot.commands.SpinIntakeCmd;
 import frc.robot.commands.SpinIntakeJoystickCmd;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LadderSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -78,13 +71,7 @@ public class RobotContainer {
               () -> driverJoystickOne.getRawButton(OIConstants.kAimAtGoalButton)
               ));
     
-    // Hook up the ladder to be controlled by the joystick as long as no other command is currently executing
-    // Probably some improvement here since I think the buttons do not give up control when they are no longer pressed
-    ladderSubsystem.setDefaultCommand(new LadderJoystickCmd(
-              ladderSubsystem, 
-              () -> driverJoystickTwo.getRawAxis(OIConstants.kLadderAxis),
-              () -> driverJoystickTwo.getRawButtonPressed(OIConstants.kLiftResetEncoderButton)));
-    
+
     // Hook up the coral intake to take in joystick as long as no other command is currently executing
     intakeSubsystem.setDefaultCommand(new SpinIntakeJoystickCmd(
               intakeSubsystem, 
@@ -143,21 +130,11 @@ public class RobotContainer {
     // Likely a suspect in robot orientation setup.....
     new JoystickButton(driverJoystickOne, OIConstants.kResetGyroButton).whileTrue(new ResetGyroCmd(swerveSubsystem));
 
-    // Controller Two Button Mapping
     
-    // When this button is pressed, send the ladder to lowest, low, mid, top scoring positions
-    // Note: These are TOGGLE, so pressing a button will hold the position until the next button press
-    //       This may end up disabling joystick control, probably room for improvement here.
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftHighButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftHighSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Top Ladder", LadderConstants.kLiftHighSetPoint)));
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftMidButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftMidSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Middle Ladder", LadderConstants.kLiftMidSetPoint)));
-    new JoystickButton(driverJoystickTwo, OIConstants.kLiftLowButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftLowSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Bottom Ladder", LadderConstants.kLiftLowSetPoint)));
-    new JoystickButton(driverJoystickTwo, OIConstants.kliftTroughButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftTroughSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Trough Ladder", LadderConstants.kLiftTroughSetPoint)));
+  
 
-    // Probably can remove this one, its pretty redundant compared to the triggers (default intakeSubsystem command)
-    //new JoystickButton(driverJoystickTwo, OIConstants.kIntakeInButton).whileTrue(new SpinIntakeCmd(intakeSubsystem, IntakeConstants.kIntakeSpeed));
+   
 
-    // While this button is pressed move the coral from the middle of the robot out until the coral is no longer sensed.
-    new JoystickButton(driverJoystickTwo, OIConstants.kIntakeOutButton).whileTrue(new CoralSenseIntakeCmd(intakeSubsystem));
   }
 
   /**
