@@ -308,10 +308,10 @@ public void driveRobotRelative(ChassisSpeeds robotRelativeSpeed){
   //frontRight.setDesiredState(desiredStates[1]);
   //backLeft.setDesiredState(desiredStates[2]);
   //backRight.setDesiredState(desiredStates[3]);
-  frontLeft.setDesiredState(desiredStates[3]);
+  frontLeft.setDesiredState(desiredStates[0]);
   frontRight.setDesiredState(desiredStates[1]);
   backLeft.setDesiredState(desiredStates[2]);
-  backRight.setDesiredState(desiredStates[0]);
+  backRight.setDesiredState(desiredStates[3]);
 }
 
 public void setModuleStates() {
@@ -323,10 +323,10 @@ public void setModuleStates() {
   //frontRight.setDesiredState(desiredStates[1]);
   //backLeft.setDesiredState(desiredStates[2]);
   //backRight.setDesiredState(desiredStates[3]);
-  frontLeft.setDesiredState(desiredStates[3]);
+  frontLeft.setDesiredState(desiredStates[0]);
   frontRight.setDesiredState(desiredStates[1]);
   backLeft.setDesiredState(desiredStates[2]);
-  backRight.setDesiredState(desiredStates[0]);
+  backRight.setDesiredState(desiredStates[3]);
 
 }
 
