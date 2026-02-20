@@ -24,7 +24,7 @@ public class LadderSubsystem extends SubsystemBase {
     liftEncoder =  new Encoder(1, 2);
     offset = getLiftEncoder();
   }
-
+ 
   public void driveLift(double speed){
     liftMotor.set(speed);
   }
@@ -53,6 +53,6 @@ public class LadderSubsystem extends SubsystemBase {
     
     SmartDashboard.putNumber("Ladder Offset", getOffset());
     
-    SmartDashboard.putNumber("Ladder Power", liftMotor.getOutputCurrent());
+   // SmartDashboard.putNumber("Ladder Power", liftMotor.getOutputCurrent());
   }
 }

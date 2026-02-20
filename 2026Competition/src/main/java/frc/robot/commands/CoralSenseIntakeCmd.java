@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.IntakeConstants;
+//import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -53,7 +53,7 @@ public class CoralSenseIntakeCmd extends Command {
     // to spin.
     if( initialMoveState || isCoralSensed )
     {
-      intakeSubsystem.spinMotor(IntakeConstants.kIntakeSpeed / 3.0);
+      //intakeSubsystem.spinMotor(IntakeConstants.kIntakeSpeed / 3.0);
     }
     else
     {

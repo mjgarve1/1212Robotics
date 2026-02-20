@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ClimbConstants;
-import frc.robot.Constants.IntakeConstants;
+//import frc.robot.Constants.ClimbConstants;
+//import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LadderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ClimbCmd;
+//import frc.robot.commands.ClimbCmd;
 import frc.robot.commands.CoralSenseIntakeCmd;
 import frc.robot.commands.LadderJoystickCmd;
 import frc.robot.commands.LadderMove;
@@ -24,7 +24,7 @@ import frc.robot.commands.SpinIntakeCmd;
 import frc.robot.commands.SpinIntakeJoystickCmd;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
+//import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LadderSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -46,7 +46,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   // Climb arm in/out motor subsystem
-  private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
+  //private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
   private final CameraSubsystem cameraSubsystem = new CameraSubsystem();
 
@@ -133,10 +133,10 @@ public class RobotContainer {
     // Controller One Button Mapping
 
     // While the button is pressed, move the climb arm in towards the middle of the robot
-    new JoystickButton(driverJoystickOne, OIConstants.kClimberIn).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbInSpeed));
+    //new JoystickButton(driverJoystickOne, OIConstants.kClimberIn).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbInSpeed));
 
     // While the button is pressed, move the climb arm out away from the robot to climb
-    new JoystickButton(driverJoystickOne, OIConstants.kClimberOut).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbOutSpeed));
+    //new JoystickButton(driverJoystickOne, OIConstants.kClimberOut).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbOutSpeed));
 
     // While this button is pressed, reset the gyro used to tell the robot which direction is forward
     // Likely a suspect in robot orientation setup.....
@@ -153,7 +153,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystickTwo, OIConstants.kliftTroughButton).toggleOnTrue(new LadderMove(ladderSubsystem, LadderConstants.kLiftTroughSetPoint, () -> driverJoystickTwo.getRawButton(OIConstants.kUnlockLadderButton), () -> SmartDashboard.getNumber("Trough Ladder", LadderConstants.kLiftTroughSetPoint)));
 
     // Probably can remove this one, its pretty redundant compared to the triggers (default intakeSubsystem command)
-    new JoystickButton(driverJoystickTwo, OIConstants.kIntakeInButton).whileTrue(new SpinIntakeCmd(intakeSubsystem, IntakeConstants.kIntakeSpeed));
+    //new JoystickButton(driverJoystickTwo, OIConstants.kIntakeInButton).whileTrue(new SpinIntakeCmd(intakeSubsystem, IntakeConstants.kIntakeSpeed));
 
     // While this button is pressed move the coral from the middle of the robot out until the coral is no longer sensed.
     new JoystickButton(driverJoystickTwo, OIConstants.kIntakeOutButton).whileTrue(new CoralSenseIntakeCmd(intakeSubsystem));

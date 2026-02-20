@@ -94,7 +94,7 @@ public final class Constants {
     public static double kSetPointProximity = 0.25;
 
   }
-
+ 
   public static class IntakeConstants {
     public static int kIntakeMotorPort = 2;
 
@@ -102,7 +102,7 @@ public final class Constants {
 
     public static double kIntakeSpeed = 1;
   }
-  
+
   public static class ClimbConstants {
     public static int kClimbMotorPort = 52;
 
@@ -114,8 +114,9 @@ public final class Constants {
     public static double kclimbDVal = 0.2;
     
   }
+  
   // public static class LimelightConstants{
-  //   /*
+  //   
   //   /Height in meters
   //   /when using april tags for distance, all units should be in meters - J
   //   / Coral Station ID: 1, 2, 12, 13 1.35 meters
@@ -291,7 +292,7 @@ public final class Constants {
     public static final int kDriverControllerTwoPort = 1;
 
     // april tag follower button
-    public static final int kAimAtGoalButton = XboxControllerMappingConstants.RIGHT_STICK_BUTTON;
+    public static final int kAimAtGoalButton = XboxControllerMappingConstants.B;
 
     //Controller One Axis Definitions
     public static final int kRobotForwardAxis   = XboxControllerMappingConstants.LEFT_STICK_Y;

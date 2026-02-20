@@ -17,11 +17,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
-  /** Creates a new ClimbSubsystem. */
+  //Creates a new ClimbSubsystem. 
   private final SparkMax climbMotor;
   private final RelativeEncoder climbEncoder;
   private SparkMaxConfig config;
-  
+
   public ClimbSubsystem() {
     climbMotor = new SparkMax(ClimbConstants.kClimbMotorPort, MotorType.kBrushless);
     climbEncoder = climbMotor.getEncoder();
