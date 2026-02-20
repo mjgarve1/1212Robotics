@@ -77,6 +77,7 @@ public class SwerveJoystickCmd extends Command {
       turningSpeed /= DriveConstants.kFineTurning;
       xSpeed /= DriveConstants.kFineDriving;
       ySpeed /= DriveConstants.kFineDriving;
+      swerveSubsystem.enableReset();
     }
     Pose2d robotPose = swerveSubsystem.getPose();
 

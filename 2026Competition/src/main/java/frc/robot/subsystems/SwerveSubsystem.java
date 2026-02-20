@@ -92,6 +92,9 @@ public class SwerveSubsystem extends SubsystemBase {
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0,0,0);
     private RobotConfig config;
 
+    private Integer rotationmt1 = 0;
+    private double angleOffsetFinal_1 = 0.0;
+
     
   public SwerveSubsystem() {
     //used to link odometry with limelight for better pose estimation.
@@ -100,7 +103,18 @@ public class SwerveSubsystem extends SubsystemBase {
     new Thread(() -> {
             try {
                 Thread.sleep(1000);
-                zeroHeading();
+                var alliance = DriverStation.getAlliance();
+          if(alliance.isPresent()){
+              if (alliance.get() == DriverStation.Alliance.Red) {
+                zeroHeading(180);
+              } 
+              else {
+                zeroHeading(0);
+              }
+              rotationmt1 = 0;
+          }
+
+                
             } catch (Exception e) {
             }
         }).start();
@@ -135,15 +149,21 @@ public class SwerveSubsystem extends SubsystemBase {
         );
     }
 
-    public void zeroHeading() {
+    public void zeroHeading(double angleAdjustment) {
         gyro.reset();
+        angleOffsetFinal_1 = angleAdjustment;
+        //gyro.setAngleAdjustment(angleAdjustment);
+        SmartDashboard.putNumber("angle Adjustment", angleAdjustment);
+        
     }
     //gets the heading returned as the gyro reading remainder after being divided by 360
     //that way it always reads from 0 to 360
     //or 0 to -360
     public double getHeading() {
         //this being negative screws with the gyro. - J
-        return Math.IEEEremainder(gyro.getAngle(), 360);
+        SmartDashboard.putNumber("gyro reading", gyro.getAngle());
+        double actual_rotation = angleOffsetFinal_1 - gyro.getAngle();
+        return Math.IEEEremainder(actual_rotation, 360);
     }
 
     public double getHeadingRadians(){
@@ -226,7 +246,15 @@ public class SwerveSubsystem extends SubsystemBase {
         m_poseEstimator.addVisionMeasurement(
             mt1.pose,
             mt1.timestampSeconds);
+        if (rotationmt1 == 10) {
+          zeroHeading(mt1.pose.getRotation().getDegrees());
+          rotationmt1 = 11;
+        }
+        else if (rotationmt1 < 10) {
+          rotationmt1 ++;
+        }
     }
+    SmartDashboard.putNumber("Orientation Updated", rotationmt1);
     SmartDashboard.putNumber("x pose", m_poseEstimator.getEstimatedPosition().getX());
     SmartDashboard.putNumber("y pose", m_poseEstimator.getEstimatedPosition().getY());
     SmartDashboard.putNumber("rotation pose", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees());
@@ -252,13 +280,17 @@ public class SwerveSubsystem extends SubsystemBase {
      SmartDashboard.putNumber("frontRight", frontRight.getAbsoluteEncoderRad());
      SmartDashboard.putNumber("backLeft", backLeft.getAbsoluteEncoderRad());
      SmartDashboard.putNumber("backRightTurning", backRight.getAbsoluteEncoderRad());
-     SmartDashboard.putString("Robot Heading", getRotation2d().toString());
+     SmartDashboard.putNumber("Robot Gyro Orientation", getRotation2d().getDegrees());
 
      SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
      SmartDashboard.putNumber("Robot heading", getHeadingRadians());
 
      
     
+  }
+
+  public void enableReset() {
+    rotationmt1 = 0;
   }
 
   public void stopModules() {

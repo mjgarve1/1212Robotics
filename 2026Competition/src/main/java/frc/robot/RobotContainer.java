@@ -15,12 +15,7 @@ import frc.robot.Constants.LadderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ResetGyroCmd;
-import frc.robot.commands.SpinIntakeCmd;
-import frc.robot.commands.SpinIntakeJoystickCmd;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LadderSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 // This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,17 +27,6 @@ public class RobotContainer {
 
   // Swerve drive (wheel motors) subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-
-  // Ladder up/down motor subsystem
-  private final LadderSubsystem ladderSubsystem = new LadderSubsystem();
-
-  // Coral in/out motor subsystem
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-
-  // Climb arm in/out motor subsystem
-  //private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
-
-  private final CameraSubsystem cameraSubsystem = new CameraSubsystem();
 
   // Autonomous robot control configuration
   private final SendableChooser<Command> autosChooser;
@@ -70,21 +54,14 @@ public class RobotContainer {
               () -> driverJoystickOne.getRawButton(OIConstants.kFineTurningButton),
               () -> driverJoystickOne.getRawButton(OIConstants.kAimAtGoalButton)
               ));
-    
-
-    // Hook up the coral intake to take in joystick as long as no other command is currently executing
-    intakeSubsystem.setDefaultCommand(new SpinIntakeJoystickCmd(
-              intakeSubsystem, 
-              () -> driverJoystickTwo.getRawAxis(OIConstants.kSpinIntakeOutAxis),
-              () -> driverJoystickTwo.getRawAxis(OIConstants.kSpinIntakeInAxis)));
-
+  
     // Creates all named commands for pathPlanner
     // Lets fix everything else before we touch this....
     
     // Set up autonomous mode to be able to do something
     // Lets fix everything else before we touch this....
     autosChooser = new SendableChooser<>();
-    midAuto = Autos.middleAuto(swerveSubsystem, intakeSubsystem);
+    midAuto = Autos.middleAuto(swerveSubsystem);
     taxiAuto = Autos.taxiAuto(swerveSubsystem);
 
     // Default to Middle Auto, which works out to drive the robot forward
@@ -129,12 +106,6 @@ public class RobotContainer {
     // While this button is pressed, reset the gyro used to tell the robot which direction is forward
     // Likely a suspect in robot orientation setup.....
     new JoystickButton(driverJoystickOne, OIConstants.kResetGyroButton).whileTrue(new ResetGyroCmd(swerveSubsystem));
-
-    
-  
-
-   
-
   }
 
   /**
