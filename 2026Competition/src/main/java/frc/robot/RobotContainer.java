@@ -14,12 +14,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.HerderConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.GenericJoystickCmd;
 import frc.robot.commands.GenericMotorMoveCmd;
 import frc.robot.commands.ResetGyroCmd;
+import frc.robot.commands.ShooterJoystickCmd;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.GenericMotorSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 // This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,11 +35,15 @@ public class RobotContainer {
   // Swerve drive (wheel motors) subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(1, MotorType.kBrushless);
+
   // PROGRAMMER COMMENT
   // Create a new generic motor subsystem for each motor that exists
   private final GenericMotorSubsystem herderSubsystem = new GenericMotorSubsystem(HerderConstants.kHerderMotorPort, MotorType.kBrushless);
   //  private final GenericMotorSubsystem herderSubsystemTwo = new GenericMotorSubsystem(HerderConstants.kHerderMotorPortTwo, MotorType.kBrushless);
   // etc...
+
+  // private final GenericMotorSubsystem shooterSubsystem = new GenericMotorSubsystem(ShooterConstants.kShooterMotorFollowerPort, MotorType.kBrushless);
 
   // Autonomous robot control configuration
   private final SendableChooser<Command> autosChooser;
@@ -88,6 +95,9 @@ public class RobotContainer {
     // herderSubsystemTwo,
     // () -> -driverJoystickTwo.getRawAxis(OIConstants.kRobotForwardAxis)));
 
+    shooterSubsystem.setDefaultCommand(new ShooterJoystickCmd(
+      shooterSubsystem,
+      () -> driverJoystickTwo.getRawButton(OIConstants.kShooterMotorButton)));
     // Creates all named commands for pathPlanner
     // Lets fix everything else before we touch this....
 

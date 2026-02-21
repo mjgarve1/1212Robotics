@@ -172,15 +172,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public Pose2d getPose() {
     return m_poseEstimator.getEstimatedPosition();
   }
-  // Yishan and sofia
-  /*
-   * public static Pose2d (double posX, double posY) {
-   * posX = m_poseEstimator.getEstimatedPosition().getX();
-   * posY = m_poseEstimator.getEstimatedPosition().getY();
-   * 
-   * }
-   */
-
+  
   // We moved the use of Chassis Speeds from our Swerve Joystick Command to our
   // Swerve Subsytem
   // This will be seen in setModuleStates and in driveRobotRelative (Which is just

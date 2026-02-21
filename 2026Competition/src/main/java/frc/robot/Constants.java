@@ -112,6 +112,16 @@ public final class Constants {
     public static double kHerderInSpeed = -0.5;
 
   }
+ 
+  public static class ShooterConstants {
+    public static int kShooterMotorLeaderPort = 2;
+    public static int kShooterMotorFollowerPort = 52;
+
+    public static double kShooterMotorSpeed = 0.5;
+   
+
+  }
+
 
   // public static class LimelightConstants{
   //
@@ -305,10 +315,11 @@ public final class Constants {
     public static final int kSpinIntakeOutAxis = XboxControllerMappingConstants.RIGHT_TRIGGER;
 
     // Controller Two Button Definitions
-    public static final int kLiftLowButton = XboxControllerMappingConstants.A;
-    public static final int kLiftMidButton = XboxControllerMappingConstants.B;
-    public static final int kLiftHighButton = XboxControllerMappingConstants.Y;
-    public static final int kliftTroughButton = XboxControllerMappingConstants.X;
+    // public static final int kLiftLowButton = XboxControllerMappingConstants.A;
+    // public static final int kLiftMidButton = XboxControllerMappingConstants.B;
+    // public static final int kLiftHighButton = XboxControllerMappingConstants.Y;
+    // public static final int kliftTroughButton = XboxControllerMappingConstants.X;
+    public static final int kShooterMotorButton = XboxControllerMappingConstants.A;
     public static final int kIntakeInButton = XboxControllerMappingConstants.RIGHT_BUMPER;
     public static final int kIntakeOutButton = XboxControllerMappingConstants.LEFT_BUMPER;
     public static final int kLiftResetEncoderButton = XboxControllerMappingConstants.START;
