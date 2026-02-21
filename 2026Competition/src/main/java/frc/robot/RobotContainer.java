@@ -5,16 +5,21 @@
 
 package frc.robot;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.LadderConstants;
+import frc.robot.Constants.HerderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.GenericJoystickCmd;
+import frc.robot.commands.GenericMotorMoveCmd;
 import frc.robot.commands.ResetGyroCmd;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.GenericMotorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 // This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,6 +31,12 @@ public class RobotContainer {
 
   // Swerve drive (wheel motors) subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+
+  // PROGRAMMER COMMENT
+  // Create a new generic motor subsystem for each motor that exists
+  private final GenericMotorSubsystem herderSubsystem = new GenericMotorSubsystem(HerderConstants.kHerderMotorPort, MotorType.kBrushless);
+  //  private final GenericMotorSubsystem herderSubsystemTwo = new GenericMotorSubsystem(HerderConstants.kHerderMotorPortTwo, MotorType.kBrushless);
+  // etc...
 
   // Autonomous robot control configuration
   private final SendableChooser<Command> autosChooser;
@@ -54,6 +65,29 @@ public class RobotContainer {
         () -> driverJoystickOne.getRawButton(OIConstants.kFineTurningButton),
         () -> driverJoystickOne.getRawButton(OIConstants.kAimAtGoalButton)));
 
+    // PROGRAMMER COMMENT
+    // You can assign the subsystem a default command to be the joystick value
+    // This will drive the motor forward or backward according to the value of the
+    // joystick position with a deadband of +/- .15, so the joystick has to be past
+    // 15% forward or backward before the motor will move
+    // Basically, you pass in the subsystem as a parameter, the second parameter is
+    // formatted like this:
+    // () -> (value to return when it gets called, like a the current joystick
+    // reading)
+    herderSubsystem.setDefaultCommand(new GenericJoystickCmd(
+        herderSubsystem,
+        () -> driverJoystickTwo.getRawAxis(OIConstants.kRobotForwardAxis)));
+
+    // PROGRAMMER COMMENT
+    // Much like the comment below in the buttons function, this too can be created for
+    // multiple subsystems corresponding to the same joystick input and you can
+    // reverse the joystick input to drive the motor "mirrored"
+    // Below is sample code to do it for a second motor
+
+    // herderSubsystemTwo.setDefaultCommand(new GenericJoystickCmd(
+    // herderSubsystemTwo,
+    // () -> -driverJoystickTwo.getRawAxis(OIConstants.kRobotForwardAxis)));
+
     // Creates all named commands for pathPlanner
     // Lets fix everything else before we touch this....
 
@@ -72,15 +106,6 @@ public class RobotContainer {
     // a different autonomous operation depending on starting position)
     SmartDashboard.putData("Autos Chooser", autosChooser);
 
-    // Add in the ability to tune the ladder
-    SmartDashboard.putNumber("Top Ladder", LadderConstants.kLiftHighSetPoint);
-    SmartDashboard.putNumber("Middle Ladder", LadderConstants.kLiftMidSetPoint);
-    SmartDashboard.putNumber("Bottom Ladder", LadderConstants.kLiftLowSetPoint);
-    SmartDashboard.putNumber("Trough Ladder", LadderConstants.kLiftTroughSetPoint);
-    SmartDashboard.putNumber("Ladder P", LadderConstants.kLiftPVal);
-    SmartDashboard.putNumber("Ladder I", LadderConstants.kLiftIVal);
-    SmartDashboard.putNumber("Ladder D", LadderConstants.kLiftDVal);
-
     // Configure button mapping
     configureBindings();
   }
@@ -96,19 +121,33 @@ public class RobotContainer {
   private void configureBindings() {
     // Controller One Button Mapping
 
-    // While the button is pressed, move the climb arm in towards the middle of the
-    // robot
-    // new JoystickButton(driverJoystickOne, OIConstants.kClimberIn).whileTrue(new
-    // ClimbCmd(climbSubsystem, ClimbConstants.kClimbInSpeed));
+    // PROGRAMMER COMMENT
+    // While the button is pressed, herderSubsystem will move the herder motor at
+    // 100% forward
+    // Send in -1.0 to move it backwards, etc...
+    // You can create a new JoystickButton and do a whileTrue and pass in the same
+    // subsystem to drive it a different speed/direction
+    // If there are two motors that need to be driven, you can create two subsystems
+    // create the command twice
+    new JoystickButton(driverJoystickOne, OIConstants.kHerderIn)
+        .whileTrue(new GenericMotorMoveCmd(herderSubsystem, HerderConstants.kHerderInSpeed));
 
-    // While the button is pressed, move the climb arm out away from the robot to
-    // climb
-    // new JoystickButton(driverJoystickOne, OIConstants.kClimberOut).whileTrue(new
-    // ClimbCmd(climbSubsystem, ClimbConstants.kClimbOutSpeed));
+    new JoystickButton(driverJoystickOne, OIConstants.kHerderOut)
+        .whileTrue(new GenericMotorMoveCmd(herderSubsystem, HerderConstants.kHerderOutSpeed));
+
+    // PROGRAMMER COMMENT
+    // For example, you can duplicate the above code and create herderSubsystemTwo
+    // where herderSubsystemTwo is assigned to SparkMax ID 101, and then invert the
+    // speed that you send:
+
+    // new JoystickButton(driverJoystickOne, OIConstants.kHerderIn)
+    // .whileTrue(new GenericMotorMoveCmd(herderSubsystemTwo, -kHerderInSpeed));
+
+    // new JoystickButton(driverJoystickOne, OIConstants.kHerderOut)
+    // .whileTrue(new GenericMotorMoveCmd(herderSubsystemTwo, HerderConstants.kHerderOutSpeed));
 
     // While this button is pressed, reset the gyro used to tell the robot which
     // direction is forward
-    // Likely a suspect in robot orientation setup.....
     new JoystickButton(driverJoystickOne, OIConstants.kResetGyroButton).whileTrue(new ResetGyroCmd(swerveSubsystem));
   }
 

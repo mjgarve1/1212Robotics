@@ -104,15 +104,12 @@ public final class Constants {
     public static double kIntakeSpeed = 1;
   }
 
-  public static class ClimbConstants {
-    public static int kClimbMotorPort = 52;
+  public static class HerderConstants {
+    public static int kHerderMotorPort = 100;
+    public static int kHerderMotorPortTwo = 101;
 
-    public static double kClimbOutSpeed = 0.5;
-    public static double kClimbInSpeed = -0.5;
-
-    public static double kClimbPVal = 5;
-    public static double kClimbIVal = 5;
-    public static double kclimbDVal = 0.2;
+    public static double kHerderOutSpeed = 0.5;
+    public static double kHerderInSpeed = -0.5;
 
   }
 
@@ -299,8 +296,8 @@ public final class Constants {
     public static final int kResetGyroButton = XboxControllerMappingConstants.A;
     public static final int kFineTurningButton = XboxControllerMappingConstants.Y;
     public static final int kDriverFieldOrientedButtonIdx = XboxControllerMappingConstants.X;
-    public static final int kClimberOut = XboxControllerMappingConstants.LEFT_BUMPER;
-    public static final int kClimberIn = XboxControllerMappingConstants.RIGHT_BUMPER;
+    public static final int kHerderOut = XboxControllerMappingConstants.LEFT_BUMPER;
+    public static final int kHerderIn = XboxControllerMappingConstants.RIGHT_BUMPER;
 
     // Controller Two Axis Definitions
     public static final int kLadderAxis = XboxControllerMappingConstants.LEFT_STICK_Y;
