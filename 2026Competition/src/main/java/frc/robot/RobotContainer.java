@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LadderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
@@ -32,7 +31,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autosChooser;
   private final Command midAuto;
   private final Command taxiAuto;
-  
+
   // Controller input configuration
   private final Joystick driverJoystickOne = new Joystick(OIConstants.kDriverControllerOnePort);
   private final Joystick driverJoystickTwo = new Joystick(OIConstants.kDriverControllerTwoPort);
@@ -44,20 +43,20 @@ public class RobotContainer {
   // Runs configure bindings method which assigns commands to buttons
   public RobotContainer() {
 
-    // Hook up the swerve subsystem to the Swerve Joystick Command (take controller joystick and translate it to direction/rotation/velocity)
+    // Hook up the swerve subsystem to the Swerve Joystick Command (take controller
+    // joystick and translate it to direction/rotation/velocity)
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
-              swerveSubsystem,
-              () -> -driverJoystickOne.getRawAxis(OIConstants.kRobotForwardAxis),
-              () -> driverJoystickOne.getRawAxis(OIConstants.kRobotSidewaysAxis),
-              () -> driverJoystickOne.getRawAxis(OIConstants.kRobotRotateAxis),
-              () -> !driverJoystickOne.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
-              () -> driverJoystickOne.getRawButton(OIConstants.kFineTurningButton),
-              () -> driverJoystickOne.getRawButton(OIConstants.kAimAtGoalButton)
-              ));
-  
+        swerveSubsystem,
+        () -> driverJoystickOne.getRawAxis(OIConstants.kRobotForwardAxis),
+        () -> driverJoystickOne.getRawAxis(OIConstants.kRobotSidewaysAxis),
+        () -> driverJoystickOne.getRawAxis(OIConstants.kRobotRotateAxis),
+        () -> !driverJoystickOne.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+        () -> driverJoystickOne.getRawButton(OIConstants.kFineTurningButton),
+        () -> driverJoystickOne.getRawButton(OIConstants.kAimAtGoalButton)));
+
     // Creates all named commands for pathPlanner
     // Lets fix everything else before we touch this....
-    
+
     // Set up autonomous mode to be able to do something
     // Lets fix everything else before we touch this....
     autosChooser = new SendableChooser<>();
@@ -71,10 +70,9 @@ public class RobotContainer {
 
     // Add the ability to swap these around (useful in competition to choose
     // a different autonomous operation depending on starting position)
-    SmartDashboard.putData("Autos Chooser", autosChooser);    
+    SmartDashboard.putData("Autos Chooser", autosChooser);
 
-
-    //Add in the ability to tune the ladder
+    // Add in the ability to tune the ladder
     SmartDashboard.putNumber("Top Ladder", LadderConstants.kLiftHighSetPoint);
     SmartDashboard.putNumber("Middle Ladder", LadderConstants.kLiftMidSetPoint);
     SmartDashboard.putNumber("Bottom Ladder", LadderConstants.kLiftLowSetPoint);
@@ -89,21 +87,27 @@ public class RobotContainer {
 
   /// configureBindings
   /// Button bindings are configured by creating a new button object
-  /// Once assigned, the pressing of the button returns a boolean which is used to run a command
+  /// Once assigned, the pressing of the button returns a boolean which is used to
+  /// run a command
   /// These commands can be toggled when the button is pressed, (toggleOnTrue)
   /// Run only while the button is pressed, (whileTrue)
-  /// or a number of other options (on release, on activation, when switching from on to off OR off to on etc...)
-  private void configureBindings()
-  {
+  /// or a number of other options (on release, on activation, when switching from
+  /// on to off OR off to on etc...)
+  private void configureBindings() {
     // Controller One Button Mapping
 
-    // While the button is pressed, move the climb arm in towards the middle of the robot
-    //new JoystickButton(driverJoystickOne, OIConstants.kClimberIn).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbInSpeed));
+    // While the button is pressed, move the climb arm in towards the middle of the
+    // robot
+    // new JoystickButton(driverJoystickOne, OIConstants.kClimberIn).whileTrue(new
+    // ClimbCmd(climbSubsystem, ClimbConstants.kClimbInSpeed));
 
-    // While the button is pressed, move the climb arm out away from the robot to climb
-    //new JoystickButton(driverJoystickOne, OIConstants.kClimberOut).whileTrue(new ClimbCmd(climbSubsystem, ClimbConstants.kClimbOutSpeed));
+    // While the button is pressed, move the climb arm out away from the robot to
+    // climb
+    // new JoystickButton(driverJoystickOne, OIConstants.kClimberOut).whileTrue(new
+    // ClimbCmd(climbSubsystem, ClimbConstants.kClimbOutSpeed));
 
-    // While this button is pressed, reset the gyro used to tell the robot which direction is forward
+    // While this button is pressed, reset the gyro used to tell the robot which
+    // direction is forward
     // Likely a suspect in robot orientation setup.....
     new JoystickButton(driverJoystickOne, OIConstants.kResetGyroButton).whileTrue(new ResetGyroCmd(swerveSubsystem));
   }

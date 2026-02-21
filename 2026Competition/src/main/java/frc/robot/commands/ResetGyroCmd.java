@@ -12,6 +12,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class ResetGyroCmd extends Command {
   /** Creates a new ResetGyroCmd. */
   private SwerveSubsystem swerveSubsystem;
+
   public ResetGyroCmd(SwerveSubsystem swerveSubsystem) {
     this.swerveSubsystem = swerveSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -20,24 +21,25 @@ public class ResetGyroCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-            var alliance = DriverStation.getAlliance();
-          if(alliance.isPresent()){
-              if (alliance.get() == DriverStation.Alliance.Red) {
-                swerveSubsystem.zeroHeading(180);
-              } 
-              else {
-                swerveSubsystem.zeroHeading(0);
-              }
-          }
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      if (alliance.get() == DriverStation.Alliance.Red) {
+        swerveSubsystem.zeroHeading(180);
+      } else {
+        swerveSubsystem.zeroHeading(0);
+      }
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
