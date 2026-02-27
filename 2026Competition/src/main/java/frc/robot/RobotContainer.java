@@ -24,6 +24,7 @@ import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.GenericMotorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.SwerveDiagnosticsCmd;
 
 // This class is where the bulk of the robot should be declared. Since Command-based is a
 // "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -97,7 +98,7 @@ public class RobotContainer {
 
     shooterSubsystem.setDefaultCommand(new ShooterJoystickCmd(
       shooterSubsystem,
-      () -> driverJoystickTwo.getRawButton(OIConstants.kShooterMotorButton)));
+      () -> driverJoystickTwo.getRawButton(OIConstants.kShooterMotorButton) ? 1.0 : 0.0));
     // Creates all named commands for pathPlanner
     // Lets fix everything else before we touch this....
 
@@ -144,6 +145,10 @@ public class RobotContainer {
 
     new JoystickButton(driverJoystickOne, OIConstants.kHerderOut)
         .whileTrue(new GenericMotorMoveCmd(herderSubsystem, HerderConstants.kHerderOutSpeed));
+
+  // Left bumper on controller one: one-shot diagnostics (also runs herder while held)
+  new JoystickButton(driverJoystickOne, OIConstants.kHerderOut)
+    .onTrue(new SwerveDiagnosticsCmd(swerveSubsystem));
 
     // PROGRAMMER COMMENT
     // For example, you can duplicate the above code and create herderSubsystemTwo

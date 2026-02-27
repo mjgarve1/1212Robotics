@@ -273,6 +273,38 @@ public class SwerveSubsystem extends SubsystemBase {
     backRight.stop();
   }
 
+  /**
+   * Compute and log some simple diagnostic swerve module states for quick bench tests.
+   * It prints desired wheel speeds and angles for a few representative chassis commands.
+   */
+  public void logDiagnosticStates() {
+    ChassisSpeeds[] tests = new ChassisSpeeds[] {
+        // forward 1 m/s
+        new ChassisSpeeds(1.0, 0.0, 0.0),
+        // left 1 m/s
+        new ChassisSpeeds(0.0, 1.0, 0.0),
+        // rotate 1 rad/s
+        new ChassisSpeeds(0.0, 0.0, 1.0)
+    };
+
+    String[] names = new String[] {"Forward_1mps", "Left_1mps", "Rotate_1rps"};
+
+    for (int t = 0; t < tests.length; t++) {
+      SwerveModuleState[] states = DriveConstants.kDriveKinematics.toSwerveModuleStates(tests[t]);
+      SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+
+      StringBuilder sb = new StringBuilder();
+      sb.append(names[t]).append(":\n");
+      for (int i = 0; i < states.length; i++) {
+        sb.append(String.format("  Module %d: speed=%.3fm/s angle=%.1fdeg\n", i, states[i].speedMetersPerSecond,
+            states[i].angle.getDegrees()));
+      }
+      // Console and SmartDashboard for easy visibility
+      System.out.print(sb.toString());
+      SmartDashboard.putString("SwerveDiag/" + names[t], sb.toString());
+    }
+  }
+
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeed) {
     SwerveModuleState[] desiredStates = DriveConstants.kDriveKinematics
         .toSwerveModuleStates(ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeed, getRotation2d()));
@@ -282,10 +314,10 @@ public class SwerveSubsystem extends SubsystemBase {
     // frontRight.setDesiredState(desiredStates[1]);
     // backLeft.setDesiredState(desiredStates[2]);
     // backRight.setDesiredState(desiredStates[3]);
-    frontLeft.setDesiredState(desiredStates[3]);
-    frontRight.setDesiredState(desiredStates[1]);
-    backLeft.setDesiredState(desiredStates[2]);
-    backRight.setDesiredState(desiredStates[0]);
+  frontLeft.setDesiredState(desiredStates[0]);
+  frontRight.setDesiredState(desiredStates[1]);
+  backLeft.setDesiredState(desiredStates[2]);
+  backRight.setDesiredState(desiredStates[3]);
   }
 
   public void setModuleStates() {
@@ -297,10 +329,10 @@ public class SwerveSubsystem extends SubsystemBase {
     // frontRight.setDesiredState(desiredStates[1]);
     // backLeft.setDesiredState(desiredStates[2]);
     // backRight.setDesiredState(desiredStates[3]);
-    frontLeft.setDesiredState(desiredStates[3]);
-    frontRight.setDesiredState(desiredStates[1]);
-    backLeft.setDesiredState(desiredStates[2]);
-    backRight.setDesiredState(desiredStates[0]);
+  frontLeft.setDesiredState(desiredStates[0]);
+  frontRight.setDesiredState(desiredStates[1]);
+  backLeft.setDesiredState(desiredStates[2]);
+  backRight.setDesiredState(desiredStates[3]);
 
   }
 
