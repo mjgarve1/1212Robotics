@@ -205,25 +205,25 @@ public final class Constants {
 
     // Try messing with these reversed/not reversed values some more
     // look at what the shuffleboard values are vs what you want them to be
-    public static final boolean kFrontLeftTurningEncoderReversed = false;
-    public static final boolean kBackLeftTurningEncoderReversed = false;
-    public static final boolean kFrontRightTurningEncoderReversed = false;
-    public static final boolean kBackRightTurningEncoderReversed = false;
+    public static final boolean kFrontLeftTurningEncoderReversed = true;
+    public static final boolean kBackLeftTurningEncoderReversed = true;
+    public static final boolean kFrontRightTurningEncoderReversed = true;
+    public static final boolean kBackRightTurningEncoderReversed = true;
 
-    public static final boolean kFrontLeftDriveEncoderReversed = false;
-    public static final boolean kBackLeftDriveEncoderReversed = false;
-    public static final boolean kFrontRightDriveEncoderReversed = false;
-    public static final boolean kBackRightDriveEncoderReversed = false;
+    public static final boolean kFrontLeftDriveEncoderReversed = true;
+    public static final boolean kBackLeftDriveEncoderReversed = true;
+    public static final boolean kFrontRightDriveEncoderReversed = true;
+    public static final boolean kBackRightDriveEncoderReversed = true;
 
     public static final int kFrontLeftDriveAbsoluteEncoderPort = 21;
     public static final int kBackLeftDriveAbsoluteEncoderPort = 20;
     public static final int kFrontRightDriveAbsoluteEncoderPort = 23;
     public static final int kBackRightDriveAbsoluteEncoderPort = 22;
 
-    public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = true;
-    public static final boolean kBackLeftDriveAbsoluteEncoderReversed = true;
-    public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
-    public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
+    public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
+    public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
+    public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
+    public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
     // ZERO CANCODERS USING PHOENIX TUNER X INSTEAD
     public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0; // 21

@@ -129,7 +129,7 @@ public class SwerveModule extends SubsystemBase {
 
   // gets drive encoder position in meters
   public double getDrivePosition() {
-    return driveEncoder.getPosition();
+    return -driveEncoder.getPosition();
   }
 
   // gets turning encoder position in radians

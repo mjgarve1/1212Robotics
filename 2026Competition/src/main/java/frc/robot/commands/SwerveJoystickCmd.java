@@ -75,7 +75,7 @@ public class SwerveJoystickCmd extends Command {
 
     // 1. Get real-time joystick inputs
     double xSpeed = xSpdFunction.get() * invert;
-    xSpeed = xSpeed * -1;
+    //xSpeed = xSpeed * -1;
 
     double ySpeed = ySpdFunction.get() * invert;
     double turningSpeed = turningSpdFunction.get();

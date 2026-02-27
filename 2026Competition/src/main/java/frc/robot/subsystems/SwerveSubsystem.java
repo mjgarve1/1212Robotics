@@ -144,7 +144,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void zeroHeading(double angleAdjustment) {
     gyro.reset();
-    angleOffsetFinal_1 = angleAdjustment;
+    gyro.setAngleAdjustment(-angleAdjustment);
+    //angleOffsetFinal_1 = angleAdjustment;
 
   }
 
@@ -154,8 +155,9 @@ public class SwerveSubsystem extends SubsystemBase {
   // or 0 to -360
   public double getHeading() {
     // this being negative screws with the gyro. - J
-    double actual_rotation = angleOffsetFinal_1 - gyro.getAngle();
-    return Math.IEEEremainder(actual_rotation, 360);
+    //double actual_rotation = angleOffsetFinal_1 - gyro.getAngle();
+    SmartDashboard.putNumber("Gyro Angle", -gyro.getAngle());
+    return Math.IEEEremainder(-gyro.getAngle(), 360);
   }
 
   public double getHeadingRadians() {
@@ -310,14 +312,20 @@ public class SwerveSubsystem extends SubsystemBase {
         .toSwerveModuleStates(ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeed, getRotation2d()));
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
 
-    // frontLeft.setDesiredState(desiredStates[0]);
-    // frontRight.setDesiredState(desiredStates[1]);
-    // backLeft.setDesiredState(desiredStates[2]);
-    // backRight.setDesiredState(desiredStates[3]);
-  frontLeft.setDesiredState(desiredStates[0]);
-  frontRight.setDesiredState(desiredStates[1]);
-  backLeft.setDesiredState(desiredStates[2]);
-  backRight.setDesiredState(desiredStates[3]);
+    // Diagnostic: print desired vs measured angle for each module
+    System.out.printf("driveRobotRelative: FL desired=%.1fdeg measured=%.1fdeg speed=%.3f\n",
+        desiredStates[0].angle.getDegrees(), frontLeft.getPosition().angle.getDegrees(), desiredStates[0].speedMetersPerSecond);
+    System.out.printf("driveRobotRelative: FR desired=%.1fdeg measured=%.1fdeg speed=%.3f\n",
+        desiredStates[1].angle.getDegrees(), frontRight.getPosition().angle.getDegrees(), desiredStates[1].speedMetersPerSecond);
+    System.out.printf("driveRobotRelative: BL desired=%.1fdeg measured=%.1fdeg speed=%.3f\n",
+        desiredStates[2].angle.getDegrees(), backLeft.getPosition().angle.getDegrees(), desiredStates[2].speedMetersPerSecond);
+    System.out.printf("driveRobotRelative: BR desired=%.1fdeg measured=%.1fdeg speed=%.3f\n",
+        desiredStates[3].angle.getDegrees(), backRight.getPosition().angle.getDegrees(), desiredStates[3].speedMetersPerSecond);
+
+    frontLeft.setDesiredState(desiredStates[0]);
+    frontRight.setDesiredState(desiredStates[1]);
+    backLeft.setDesiredState(desiredStates[2]);
+    backRight.setDesiredState(desiredStates[3]);
   }
 
   public void setModuleStates() {
@@ -325,14 +333,20 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveModuleState[] desiredStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
 
-    // frontLeft.setDesiredState(desiredStates[0]);
-    // frontRight.setDesiredState(desiredStates[1]);
-    // backLeft.setDesiredState(desiredStates[2]);
-    // backRight.setDesiredState(desiredStates[3]);
-  frontLeft.setDesiredState(desiredStates[0]);
-  frontRight.setDesiredState(desiredStates[1]);
-  backLeft.setDesiredState(desiredStates[2]);
-  backRight.setDesiredState(desiredStates[3]);
+    // Diagnostic: print desired vs measured angle for each module
+    System.out.printf("setModuleStates: FL desired=%.1fdeg measured=%.1fdeg speed=%.3f\n",
+        desiredStates[0].angle.getDegrees(), frontLeft.getPosition().angle.getDegrees(), desiredStates[0].speedMetersPerSecond);
+    System.out.printf("setModuleStates: FR desired=%.1fdeg measured=%.1fdeg speed=%.3f\n",
+        desiredStates[1].angle.getDegrees(), frontRight.getPosition().angle.getDegrees(), desiredStates[1].speedMetersPerSecond);
+    System.out.printf("setModuleStates: BL desired=%.1fdeg measured=%.1fdeg speed=%.3f\n",
+        desiredStates[2].angle.getDegrees(), backLeft.getPosition().angle.getDegrees(), desiredStates[2].speedMetersPerSecond);
+    System.out.printf("setModuleStates: BR desired=%.1fdeg measured=%.1fdeg speed=%.3f\n",
+        desiredStates[3].angle.getDegrees(), backRight.getPosition().angle.getDegrees(), desiredStates[3].speedMetersPerSecond);
+
+    frontLeft.setDesiredState(desiredStates[0]);
+    frontRight.setDesiredState(desiredStates[1]);
+    backLeft.setDesiredState(desiredStates[2]);
+    backRight.setDesiredState(desiredStates[3]);
 
   }
 
