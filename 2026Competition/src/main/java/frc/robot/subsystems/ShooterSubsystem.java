@@ -16,10 +16,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private SparkMax shooterMotorFollower;
     private SparkMaxConfig config;
 
-    public ShooterSubsystem(int sparkMaxId, MotorType motorType) {
+    public ShooterSubsystem(int sparkMaxId, int sparkMaxFollowerId) {
         // need id and motor type
-        shooterMotorLeader = new SparkMax(2, MotorType.kBrushless);
-        shooterMotorFollower = new SparkMax(52, MotorType.kBrushless);
+        shooterMotorLeader = new SparkMax(sparkMaxId, MotorType.kBrushless);
+        shooterMotorFollower = new SparkMax(sparkMaxFollowerId, MotorType.kBrushless);
         encoder = shooterMotorFollower.getEncoder();
 
         SparkMaxConfig shooterMotorLeaderConfig = new SparkMaxConfig();
@@ -29,7 +29,6 @@ public class ShooterSubsystem extends SubsystemBase {
                 .inverted(false);
 
         shooterMotorFollowerConfig
-                .follow(shooterMotorLeader)
                 .inverted(true);
 
         // how to follow?
@@ -41,6 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void spinMotor(double speed) {
         shooterMotorLeader.set(speed);
+        shooterMotorFollower.set(speed);
     }
     public double getEncoderPosition(){
     return encoder.getPosition();
@@ -52,6 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setSpeed(double speed){
     shooterMotorLeader.set(speed);
+    shooterMotorFollower.set(speed);
   }
 
   @Override

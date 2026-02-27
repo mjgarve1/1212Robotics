@@ -8,9 +8,11 @@ package frc.robot;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.HerderConstants;
 import frc.robot.Constants.OIConstants;
@@ -36,7 +38,11 @@ public class RobotContainer {
   // Swerve drive (wheel motors) subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem(1, MotorType.kBrushless);
+  // operator controller (second controller on USB: port 1)
+  private final XboxController operatorController = new XboxController(1);
+
+  private final ShooterSubsystem shooterSubsystem =
+      new ShooterSubsystem(ShooterConstants.kShooterMotorLeaderPort, ShooterConstants.kShooterMotorFollowerPort);
 
   // PROGRAMMER COMMENT
   // Create a new generic motor subsystem for each motor that exists
@@ -96,9 +102,9 @@ public class RobotContainer {
     // herderSubsystemTwo,
     // () -> -driverJoystickTwo.getRawAxis(OIConstants.kRobotForwardAxis)));
 
-    shooterSubsystem.setDefaultCommand(new ShooterJoystickCmd(
-      shooterSubsystem,
-      () -> driverJoystickTwo.getRawButton(OIConstants.kShooterMotorButton) ? 1.0 : 0.0));
+    // shooterSubsystem.setDefaultCommand(new ShooterJoystickCmd(
+    //   shooterSubsystem,
+    //   () -> driverJoystickTwo.getRawButton(OIConstants.kShooterMotorButton) ? 1.0 : 0.0));
     // Creates all named commands for pathPlanner
     // Lets fix everything else before we touch this....
 
@@ -146,9 +152,6 @@ public class RobotContainer {
     new JoystickButton(driverJoystickOne, OIConstants.kHerderOut)
         .whileTrue(new GenericMotorMoveCmd(herderSubsystem, HerderConstants.kHerderOutSpeed));
 
-  // Left bumper on controller one: one-shot diagnostics (also runs herder while held)
-  new JoystickButton(driverJoystickOne, OIConstants.kHerderOut)
-    .onTrue(new SwerveDiagnosticsCmd(swerveSubsystem));
 
     // PROGRAMMER COMMENT
     // For example, you can duplicate the above code and create herderSubsystemTwo
@@ -164,6 +167,13 @@ public class RobotContainer {
     // While this button is pressed, reset the gyro used to tell the robot which
     // direction is forward
     new JoystickButton(driverJoystickOne, OIConstants.kResetGyroButton).whileTrue(new ResetGyroCmd(swerveSubsystem));
+
+    // left bumper on second controller: start shooter while pressed, stop when released
+    new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value)
+        .whileTrue(new StartEndCommand(
+            () -> shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed),
+            () -> shooterSubsystem.setSpeed(0.0),
+            shooterSubsystem));
   }
 
   /**
