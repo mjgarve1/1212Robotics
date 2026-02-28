@@ -35,6 +35,7 @@ public class DriveForwardUntilVisionCmd extends Command {
     LimelightHelpers.PoseEstimate est = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
     if (est != null && est.tagCount > 0) {
       // Acceptable vision estimate found: reset pose estimator to this pose and finish
+      swerve.zeroHeading(est.pose.getRotation().getDegrees());
       swerve.resetPose(est.pose);
       gotVision = true;
     }
