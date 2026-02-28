@@ -56,6 +56,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autosChooser;
   private final Command midAuto;
   private final Command taxiAuto;
+  private final Command visionAcquireAuto;
 
   // Controller input configuration
   private final Joystick driverJoystickOne = new Joystick(OIConstants.kDriverControllerOnePort);
@@ -113,11 +114,13 @@ public class RobotContainer {
     autosChooser = new SendableChooser<>();
     midAuto = Autos.middleAuto(swerveSubsystem);
     taxiAuto = Autos.taxiAuto(swerveSubsystem);
+  visionAcquireAuto = Autos.visionAcquireAuto(swerveSubsystem);
 
     // Default to Middle Auto, which works out to drive the robot forward
-    autosChooser.setDefaultOption("Middle Auto", midAuto);
+    autosChooser.setDefaultOption("Vision Acquire Auto", midAuto);
     // No idea what taxiAuto is, figure it out later
     autosChooser.addOption("taxiAuto", taxiAuto);
+  autosChooser.addOption("Vision Acquire Auto", visionAcquireAuto);
 
     // Add the ability to swap these around (useful in competition to choose
     // a different autonomous operation depending on starting position)

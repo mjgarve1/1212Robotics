@@ -54,6 +54,11 @@ public final class Autos {
     );
   }
 
+  // Drive forward until a vision-based pose estimate is available (or timeout)
+  public static Command visionAcquireAuto(SwerveSubsystem swerveSubsystem) {
+    return new DriveForwardUntilVisionCmd(swerveSubsystem);
+  }
+
 
 
   private Autos() {
