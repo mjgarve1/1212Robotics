@@ -44,14 +44,11 @@ public class RobotContainer {
   private final ShooterSubsystem shooterSubsystem =
       new ShooterSubsystem(ShooterConstants.kShooterMotorLeaderPort, ShooterConstants.kShooterMotorFollowerPort);
 
+
   // PROGRAMMER COMMENT
   // Create a new generic motor subsystem for each motor that exists
-  private final GenericMotorSubsystem herderSubsystem = new GenericMotorSubsystem(HerderConstants.kHerderMotorPort, MotorType.kBrushless);
-  //  private final GenericMotorSubsystem herderSubsystemTwo = new GenericMotorSubsystem(HerderConstants.kHerderMotorPortTwo, MotorType.kBrushless);
-  // etc...
-
-  // private final GenericMotorSubsystem shooterSubsystem = new GenericMotorSubsystem(ShooterConstants.kShooterMotorFollowerPort, MotorType.kBrushless);
-
+  private final ShooterSubsystem herderSubsystem = new ShooterSubsystem(HerderConstants.kHerderMotorPort, HerderConstants.kHerderMotorPortTwo);
+  
   // Autonomous robot control configuration
   private final SendableChooser<Command> autosChooser;
   private final Command midAuto;
@@ -80,18 +77,6 @@ public class RobotContainer {
         () -> driverJoystickOne.getRawButton(OIConstants.kFineTurningButton),
         () -> driverJoystickOne.getRawButton(OIConstants.kAimAtGoalButton)));
 
-    // PROGRAMMER COMMENT
-    // You can assign the subsystem a default command to be the joystick value
-    // This will drive the motor forward or backward according to the value of the
-    // joystick position with a deadband of +/- .15, so the joystick has to be past
-    // 15% forward or backward before the motor will move
-    // Basically, you pass in the subsystem as a parameter, the second parameter is
-    // formatted like this:
-    // () -> (value to return when it gets called, like a the current joystick
-    // reading)
-    herderSubsystem.setDefaultCommand(new GenericJoystickCmd(
-        herderSubsystem,
-        () -> driverJoystickTwo.getRawAxis(OIConstants.kRobotForwardAxis)));
 
     // PROGRAMMER COMMENT
     // Much like the comment below in the buttons function, this too can be created for
@@ -141,20 +126,6 @@ public class RobotContainer {
   private void configureBindings() {
     // Controller One Button Mapping
 
-    // PROGRAMMER COMMENT
-    // While the button is pressed, herderSubsystem will move the herder motor at
-    // 100% forward
-    // Send in -1.0 to move it backwards, etc...
-    // You can create a new JoystickButton and do a whileTrue and pass in the same
-    // subsystem to drive it a different speed/direction
-    // If there are two motors that need to be driven, you can create two subsystems
-    // create the command twice
-    new JoystickButton(driverJoystickOne, OIConstants.kHerderIn)
-        .whileTrue(new GenericMotorMoveCmd(herderSubsystem, HerderConstants.kHerderInSpeed));
-
-    new JoystickButton(driverJoystickOne, OIConstants.kHerderOut)
-        .whileTrue(new GenericMotorMoveCmd(herderSubsystem, HerderConstants.kHerderOutSpeed));
-
 
     // PROGRAMMER COMMENT
     // For example, you can duplicate the above code and create herderSubsystemTwo
@@ -174,11 +145,15 @@ public class RobotContainer {
     // left bumper on second controller: start shooter while pressed, stop when released
     new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value)
         .whileTrue(new StartEndCommand(
-            () -> shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed),
+            () -> shooterSubsystem.calculateAndSetSpeed(swerveSubsystem),
             () -> shooterSubsystem.setSpeed(0.0),
             shooterSubsystem));
+    new JoystickButton(operatorController, XboxController.Button.kRightBumper.value)
+        .whileTrue(new StartEndCommand(
+            () -> herderSubsystem.setSpeed(HerderConstants.kHerderOutSpeed),
+            () -> herderSubsystem.setSpeed(0.0),
+            herderSubsystem));
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

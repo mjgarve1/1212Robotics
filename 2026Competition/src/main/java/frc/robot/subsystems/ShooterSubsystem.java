@@ -55,6 +55,14 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorFollower.set(speed);
   }
 
+  public void calculateAndSetSpeed(SwerveSubsystem swerveSubsystem) {
+  
+    double calculatedSpeed = 0; // Replace with actual calculation
+    //Get the distance here, similar to how the robot orientation calculation happens in the SwerveJoystickCmd
+    //Test shooting distance at different motor speeds and figure out how to translate that
+    setSpeed(calculatedSpeed);
+  }
+
   @Override
   public void periodic() {
 
