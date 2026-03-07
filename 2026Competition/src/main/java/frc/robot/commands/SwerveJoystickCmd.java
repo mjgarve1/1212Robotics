@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Rotation;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -30,7 +31,7 @@ public class SwerveJoystickCmd extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
   private final Supplier<Boolean> fieldOrientedFunction, fineDrivingFunction;
   private final Supplier<Boolean> aimAtGoalFunction;
-  //private PIDController turningPidController;
+  private PIDController turningPidController;
   private boolean previousFineDrivingState, fineDrivingState;
   private final SlewRateLimiter xLimiter, yLimiter, tLimiter;
 
@@ -52,8 +53,8 @@ public class SwerveJoystickCmd extends Command {
     previousFineDrivingState = false;
     fineDrivingState = false;
     addRequirements(swerveSubsystem);
-    //turningPidController = new PIDController(0.5, 0.1, 0);
-    //turningPidController.enableContinuousInput(-180.0, 180.0);
+    turningPidController = new PIDController(0.5, 0.1, 0);
+    turningPidController.enableContinuousInput(-180.0, 180.0);
   }
 
   // Called when the command is initially scheduled.
@@ -92,6 +93,7 @@ public class SwerveJoystickCmd extends Command {
       ySpeed /= DriveConstants.kFineDriving;
     }
 
+    // If the robot doesnt aim properly anymore, uncomment this code and comment out the below code block.
     // Pose2d robotPose = swerveSubsystem.getPose();
     // Pose2d goalPose = ShooterConstants.BLUE_GOAL_POSE;
     // if (alliance.isPresent() && alliance.get() == Alliance.Red) {
@@ -110,6 +112,7 @@ public class SwerveJoystickCmd extends Command {
 
     //   SmartDashboard.putNumber("Goal Speed", turningSpeed);
     // }
+    //Uncomment to here, then comment out until the next comment
     Pose2d goalPose = ShooterConstants.BLUE_GOAL_POSE;
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
       goalPose = ShooterConstants.RED_GOAL_POSE;
@@ -119,6 +122,7 @@ public class SwerveJoystickCmd extends Command {
     if (aimAtGoalFunction.get()) {
       turningSpeed = swerveSubsystem.getAimTurningSpeed(goalPose);
     }
+    //Comment out to here
 
     // 2. Make the driving smoother
     xSpeed = xLimiter.calculate(xSpeed * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond);
