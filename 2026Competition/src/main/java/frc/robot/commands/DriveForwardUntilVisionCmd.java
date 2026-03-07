@@ -41,6 +41,9 @@ public class DriveForwardUntilVisionCmd extends Command {
     }
 
     // If gotVision is true, then you can rotate the robot and use its distance to calculate how to shoot the balls.
+    if (gotVision) {
+
+    }
   }
 
   @Override

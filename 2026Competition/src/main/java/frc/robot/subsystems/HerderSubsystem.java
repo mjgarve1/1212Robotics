@@ -13,11 +13,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class HerderSubsystem extends SubsystemBase{
     private final SparkMax herderMotor;
     private final RelativeEncoder herderEncoder;
+    private final SparkMax winchMotor;
+    private final RelativeEncoder winchEncoder;
     private SparkMaxConfig config;
 
-   public HerderSubsystem(int sparkMaxId, MotorType motorType) {
-    herderMotor = new SparkMax(sparkMaxId, motorType);
+   public HerderSubsystem(int sparkMaxId, int sparkMaxId2) {
+    herderMotor = new SparkMax(sparkMaxId, MotorType.kBrushless);
     herderEncoder = herderMotor.getEncoder();
+    winchMotor = new SparkMax(sparkMaxId2, MotorType.kBrushless);
+    winchEncoder = winchMotor.getEncoder();
     
     config = new SparkMaxConfig();
 
@@ -27,16 +31,20 @@ public class HerderSubsystem extends SubsystemBase{
 
   }
 
-  public double getEncoderPosition(){
-    return herderEncoder.getPosition();
+  public void setHerderSpeed(double speed){
+    herderMotor.set(speed);
+  }
+
+  public void setWinchSpeed(double speed){
+    winchMotor.set(speed);
+  }
+
+  public double getWinchEncoderPosition(){
+    return winchEncoder.getPosition();
   }
 
   public void resetEncoderPosition(){
-    herderEncoder.setPosition(0);
-  }
-
-  public void setSpeed(double speed){
-    herderMotor.set(speed);
+    winchEncoder.setPosition(0);
   }
 
   @Override

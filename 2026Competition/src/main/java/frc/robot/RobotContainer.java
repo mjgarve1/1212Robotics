@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.BeltConstants;
 import frc.robot.Constants.HerderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -23,10 +24,13 @@ import frc.robot.commands.GenericMotorMoveCmd;
 import frc.robot.commands.ResetGyroCmd;
 import frc.robot.commands.ShooterJoystickCmd;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.BeltSubsystem;
 import frc.robot.subsystems.GenericMotorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.SwerveDiagnosticsCmd;
+import frc.robot.subsystems.HerderSubsystem;
+import frc.robot.commands.WinchJoystickCmd;
 
 // This class is where the bulk of the robot should be declared. Since Command-based is a
 // "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -38,17 +42,14 @@ public class RobotContainer {
   // Swerve drive (wheel motors) subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  // operator controller (second controller on USB: port 1)
-  private final XboxController operatorController = new XboxController(1);
-
   private final ShooterSubsystem shooterSubsystem =
-      new ShooterSubsystem(ShooterConstants.kShooterMotorLeaderPort, ShooterConstants.kShooterMotorFollowerPort);
+      new ShooterSubsystem(ShooterConstants.kShooter1MotorPort, ShooterConstants.kShooter2MotorPort);
 
 
   // PROGRAMMER COMMENT
   // Create a new generic motor subsystem for each motor that exists
-  private final ShooterSubsystem herderSubsystem = new ShooterSubsystem(HerderConstants.kHerderMotorPort, HerderConstants.kHerderMotorPortTwo);
-  
+  private final HerderSubsystem herderSubsystem = new HerderSubsystem(HerderConstants.kHerderMotorPort, HerderConstants.kWinchMotorPort);
+  private final BeltSubsystem beltSubsystem = new BeltSubsystem(BeltConstants.kBelt1MotorPort, BeltConstants.kBelt2MotorPort);
   // Autonomous robot control configuration
   private final SendableChooser<Command> autosChooser;
   private final Command midAuto;
@@ -77,7 +78,15 @@ public class RobotContainer {
         () -> driverJoystickOne.getRawButton(OIConstants.kFineTurningButton),
         () -> driverJoystickOne.getRawButton(OIConstants.kAimAtGoalButton)));
 
-
+    shooterSubsystem.setDefaultCommand(new ShooterJoystickCmd(
+      shooterSubsystem, beltSubsystem, herderSubsystem, swerveSubsystem,
+      () -> driverJoystickTwo.getRawAxis(OIConstants.kShootFuelButton),
+      () -> driverJoystickTwo.getRawAxis(OIConstants.kHerdFuelButton),
+      () -> driverJoystickTwo.getRawButton(OIConstants.kDumpFuelButton))
+      );
+    herderSubsystem.setDefaultCommand(new WinchJoystickCmd(
+      herderSubsystem,
+      () -> driverJoystickTwo.getRawAxis(OIConstants.kWinchAxis)));
     // PROGRAMMER COMMENT
     // Much like the comment below in the buttons function, this too can be created for
     // multiple subsystems corresponding to the same joystick input and you can
@@ -127,6 +136,7 @@ public class RobotContainer {
     // Controller One Button Mapping
 
 
+
     // PROGRAMMER COMMENT
     // For example, you can duplicate the above code and create herderSubsystemTwo
     // where herderSubsystemTwo is assigned to SparkMax ID 101, and then invert the
@@ -142,17 +152,6 @@ public class RobotContainer {
     // direction is forward
     new JoystickButton(driverJoystickOne, OIConstants.kResetGyroButton).whileTrue(new ResetGyroCmd(swerveSubsystem));
 
-    // left bumper on second controller: start shooter while pressed, stop when released
-    new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value)
-        .whileTrue(new StartEndCommand(
-            () -> shooterSubsystem.calculateAndSetSpeed(swerveSubsystem),
-            () -> shooterSubsystem.setSpeed(0.0),
-            shooterSubsystem));
-    new JoystickButton(operatorController, XboxController.Button.kRightBumper.value)
-        .whileTrue(new StartEndCommand(
-            () -> herderSubsystem.setSpeed(HerderConstants.kHerderOutSpeed),
-            () -> herderSubsystem.setSpeed(0.0),
-            herderSubsystem));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

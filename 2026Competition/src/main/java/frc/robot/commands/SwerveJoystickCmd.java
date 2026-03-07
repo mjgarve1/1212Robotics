@@ -22,6 +22,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Constants.ShooterConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SwerveJoystickCmd extends Command {
@@ -33,7 +34,6 @@ public class SwerveJoystickCmd extends Command {
   private PIDController turningPidController;
   private boolean previousFineDrivingState, fineDrivingState;
   private final SlewRateLimiter xLimiter, yLimiter, tLimiter;
-  private static final Pose2d GOAL_POSE = new Pose2d(11.9, 4.03, new Rotation2d());
 
   public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
       Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
@@ -94,7 +94,11 @@ public class SwerveJoystickCmd extends Command {
     }
 
     Pose2d robotPose = swerveSubsystem.getPose();
-    Rotation2d desiredRotation2d = robotPose.relativeTo(GOAL_POSE).getTranslation().getAngle()
+    Pose2d goalPose = ShooterConstants.BLUE_GOAL_POSE;
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+      goalPose = ShooterConstants.RED_GOAL_POSE;
+    }
+    Rotation2d desiredRotation2d = robotPose.relativeTo(goalPose).getTranslation().getAngle()
         .minus(Rotation2d.k180deg);
     double testDegrees = desiredRotation2d.getDegrees();
     double offsetDegrees = robotPose.getRotation().minus(desiredRotation2d).getDegrees();

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -42,71 +44,9 @@ public final class Constants {
 
   }
 
-  public static class LadderConstants {
-    public static final int kLiftMotorPort = 50;
-
-    // We need to test different values
-    public static double kLiftPVal = 1.0; // 3
-    public static double kLiftIVal = 0.02; // 1.5
-    public static double kLiftDVal = 0.0; // 0.2
-
-    // We need to find the points on the ladder for the encoder - J
-    /// L1 .46m
-    /// L2 .81m
-    /// L3 1.21m
-    /// L4 1.83m
-    /// height at encoder 0 -
-    /// height at max -13.5 - 1.27
-
-    // converts encoder value to rotations
-    public static double kRotationsPerMeter = -13.5 / 1.27;
-
-    // height of chassy in meters
-    public static double kHeightOfChassy = 0.1905;
-
-    // total offset combining chassy height and gap between ladder and top of l4
-    public static double kL4Offset = 0.5461;
-    public static double kMidOffset = 0.3429;
-
-    // heights of reef levels in meters
-    public static double kL4Height = 1.83;
-    public static double kL3Height = 1.21;
-    public static double kL2Height = .81;
-    public static double kL1Height = .46;
-
-    // setPoints subtracting an offset from the height and converting into rotations
-    public static double kLiftHighSetPoint = 14.2; // Y
-    public static double kLiftMidSetPoint = 7.954; // B
-    public static double kLiftLowSetPoint = 0; // A
-    public static double kLiftTroughSetPoint = 2.691; // X
-
-    // recieve is assumed to be 0
-    public static double kLiftRecieveSetPoint = 0;
-    // limits
-    public static double kLadderBottom = 0;
-    public static double kLadderTop = 14.2;
-
-    // more speed going up
-    public static double kLiftSpeedUp = 0.5;
-    public static double kliftSpeedDown = 0.5;
-    public static double kStop = 0;
-
-    // range between encoder and setpoint on when to stop for auto
-    public static double kSetPointProximity = 0.25;
-
-  }
-
-  public static class IntakeConstants {
-    public static int kIntakeMotorPort = 2;
-
-    public static int proxSensorPort = 0;
-
-    public static double kIntakeSpeed = 1;
-  }
-
   public static class HerderConstants {
-    public static int kHerderMotorPort = 100;
-    public static int kHerderMotorPortTwo = 101;
+    public static int kHerderMotorPort = 50;
+    public static int kWinchMotorPort = 52;
 
     public static double kHerderOutSpeed = 0.5;
     public static double kHerderInSpeed = -0.5;
@@ -114,14 +54,26 @@ public final class Constants {
   }
  
   public static class ShooterConstants {
-    public static int kShooterMotorLeaderPort = 52;
-    public static int kShooterMotorFollowerPort = 2;
+    public static int kShooter1MotorPort = 30;
+    public static int kShooter2MotorPort = 31;
 
-    public static double kShooterMotorSpeed = 0.5;
-   
+    public static double kShooterMotorSpeed = 1.0;
+    public static double kNegativeShooterMotorSpeed = -0.5;
+    public static final Pose2d RED_GOAL_POSE = new Pose2d(11.9, 4.03, new Rotation2d());
+    //Find Blue Goal Pose
+    public static final Pose2d BLUE_GOAL_POSE = new Pose2d(11.9, 4.03, new Rotation2d());
+    public static final double kMaxGoalDistance = 8.0;
+    public static final double kMinGoalDistance = 1.0;
 
   }
+  public static class BeltConstants {
+    public static int kBelt1MotorPort = 40;
+    public static int kBelt2MotorPort = 41;
 
+    public static double kBeltInSpeed = 0.5;
+    public static double kBeltOutSpeed = -0.5;
+
+  }
 
   // public static class LimelightConstants{
   //
@@ -202,6 +154,8 @@ public final class Constants {
     public static final int kBackLeftTurningMotorPort = 5;
     public static final int kFrontRightTurningMotorPort = 14;
     public static final int kBackRightTurningMotorPort = 10;
+
+   
 
     // Try messing with these reversed/not reversed values some more
     // look at what the shuffleboard values are vs what you want them to be
@@ -294,8 +248,6 @@ public final class Constants {
     public static final int kDriverControllerTwoPort = 1;
 
     // april tag follower button
-    public static final int kAimAtGoalButton = XboxControllerMappingConstants.B;
-
     // Controller One Axis Definitions
     public static final int kRobotForwardAxis = XboxControllerMappingConstants.LEFT_STICK_Y;
     public static final int kRobotSidewaysAxis = XboxControllerMappingConstants.LEFT_STICK_X;
@@ -305,26 +257,20 @@ public final class Constants {
     public static final int kResetGyroButton = XboxControllerMappingConstants.A;
     public static final int kFineTurningButton = XboxControllerMappingConstants.Y;
     public static final int kDriverFieldOrientedButtonIdx = XboxControllerMappingConstants.X;
-    public static final int kHerderOut = XboxControllerMappingConstants.LEFT_BUMPER;
-    public static final int kHerderIn = XboxControllerMappingConstants.RIGHT_BUMPER;
+    public static final int kAimAtGoalButton = XboxControllerMappingConstants.B;
+
 
     // Controller Two Axis Definitions
-    public static final int kLadderAxis = XboxControllerMappingConstants.LEFT_STICK_Y;
-    public static final int kSpinIntakeInAxis = XboxControllerMappingConstants.LEFT_TRIGGER;
-    public static final int kSpinIntakeOutAxis = XboxControllerMappingConstants.RIGHT_TRIGGER;
+    public static final int kShootFuelButton = XboxControllerMappingConstants.RIGHT_TRIGGER;
+    public static final int kHerdFuelButton = XboxControllerMappingConstants.LEFT_TRIGGER;
+    public static final int kDumpFuelButton = XboxControllerMappingConstants.LEFT_BUMPER;
+
+    public static final int kWinchAxis = XboxControllerMappingConstants.RIGHT_STICK_Y;
+  
 
     // Controller Two Button Definitions
-    // public static final int kLiftLowButton = XboxControllerMappingConstants.A;
-    // public static final int kLiftMidButton = XboxControllerMappingConstants.B;
-    // public static final int kLiftHighButton = XboxControllerMappingConstants.Y;
-    // public static final int kliftTroughButton = XboxControllerMappingConstants.X;
-    public static final int kShooterMotorButton = XboxControllerMappingConstants.A;
-    public static final int kIntakeInButton = XboxControllerMappingConstants.RIGHT_BUMPER;
-    public static final int kIntakeOutButton = XboxControllerMappingConstants.LEFT_BUMPER;
-    public static final int kLiftResetEncoderButton = XboxControllerMappingConstants.START;
-    public static final int kUnlockLadderButton = XboxControllerMappingConstants.SELECT;
-    public static final int kIntakeInPad = XboxControllerMappingConstants.DPAD_UP;
-    public static final int kIntakeOutPad = XboxControllerMappingConstants.DPAD_DOWN;
+    public static final double kTriggerDeadband = 0.25;
+
   }
 
   public static final class AutoConstants {

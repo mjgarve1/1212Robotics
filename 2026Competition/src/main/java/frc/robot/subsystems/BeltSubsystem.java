@@ -12,11 +12,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BeltSubsystem extends SubsystemBase{
   private final SparkMax beltMotor;
+  private final SparkMax beltMotor2;
   private final RelativeEncoder beltEncoder;
   private SparkMaxConfig config;
 
-  public BeltSubsystem(int sparkMaxId, MotorType motorType) {
-    beltMotor = new SparkMax(sparkMaxId, motorType);
+  public BeltSubsystem(int sparkMaxId, int sparkMaxId2) {
+    beltMotor = new SparkMax(sparkMaxId, MotorType.kBrushless);
+    beltMotor2 = new SparkMax(sparkMaxId2, MotorType.kBrushless);
     beltEncoder = beltMotor.getEncoder();
     
     config = new SparkMaxConfig();
@@ -37,6 +39,7 @@ public class BeltSubsystem extends SubsystemBase{
 
   public void setSpeed(double speed){
     beltMotor.set(speed);
+    beltMotor2.set(-speed);
   }
 
   @Override

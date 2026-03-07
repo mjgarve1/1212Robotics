@@ -7,22 +7,38 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.BeltConstants;
+import frc.robot.Constants.HerderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.GenericMotorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.BeltSubsystem;
+import frc.robot.subsystems.HerderSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShooterJoystickCmd extends Command {
   /** Creates a new GenericJoystickCmd. */
 
-  private final ShooterSubsystem shooterSubsystem;
-  private final Supplier<Double> speedFunction;
-  public ShooterJoystickCmd(ShooterSubsystem shooterSubsystem, Supplier<Double> spdFunction) {
+  private final ShooterSubsystem m_shooterSubsystem;
+  private final Supplier<Double> m_shootFunction;
+  private final Supplier<Double> m_herdFunction;
+  private final Supplier<Boolean> m_dumpFunction;
+  private final BeltSubsystem m_beltSubsystem;
+  private final HerderSubsystem m_herderSubsystem;
+  private final SwerveSubsystem m_swerveSubsystem;
+  public ShooterJoystickCmd(ShooterSubsystem shooterSubsystem, 
+  BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Boolean> dumpFunction) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.shooterSubsystem = shooterSubsystem;
-    speedFunction = spdFunction;
-    addRequirements(shooterSubsystem);
+    m_shooterSubsystem = shooterSubsystem;
+    m_shootFunction = shootFunction;
+    m_herdFunction = herdFunction;
+    m_dumpFunction = dumpFunction;
+    m_swerveSubsystem = swerveSubsystem;
+    m_beltSubsystem = beltSubsystem;
+    m_herderSubsystem = herderSubsystem;
+    addRequirements(shooterSubsystem, beltSubsystem, herderSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -33,14 +49,41 @@ public class ShooterJoystickCmd extends Command {
   @Override
   public void execute() {
     //1. get real time joystick input
-    double speed = speedFunction.get();
+    double shootSpeed = m_shootFunction.get();
+    double herdSpeed = m_herdFunction.get();
+    boolean dump = m_dumpFunction.get();
     //2. apply deadband
-    speed = Math.abs(speed) > OIConstants.kControllerAxisDeadband ? speed : 0;
-
-    //3. Output speed to motor
-
-    shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed);
-
+    if(Math.abs(shootSpeed) > OIConstants.kTriggerDeadband) {
+      m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
+      m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
+      // calculate shooter speed based on distance to goal
+      double distanceToGoal = m_swerveSubsystem.getGoalDistance();
+      // simple linear relationship between distance and shooter speed (tune as necessary)
+      double shooterSpeed = ShooterConstants.kShooterMotorSpeed * (distanceToGoal / ShooterConstants.kMaxGoalDistance);
+      if(distanceToGoal > ShooterConstants.kMaxGoalDistance) {
+        shooterSpeed = ShooterConstants.kShooterMotorSpeed; // cap at max speed
+      }
+      else if(distanceToGoal < ShooterConstants.kMinGoalDistance) {
+        shooterSpeed = ShooterConstants.kShooterMotorSpeed * 0.1; // minimum speed to prevent jamming
+      }
+      m_shooterSubsystem.setSpeed(shooterSpeed);
+    }
+    else if (Math.abs(herdSpeed) > OIConstants.kTriggerDeadband) {
+      m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
+      m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
+      m_shooterSubsystem.setSpeed(ShooterConstants.kNegativeShooterMotorSpeed);
+    }
+    else if(dump) {
+      m_beltSubsystem.setSpeed(BeltConstants.kBeltOutSpeed);
+      m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderOutSpeed);
+      m_shooterSubsystem.setSpeed(ShooterConstants.kNegativeShooterMotorSpeed);
+    }
+    else {
+      m_shooterSubsystem.setSpeed(0);
+      m_beltSubsystem.setSpeed(0);
+      m_herderSubsystem.setHerderSpeed(0);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
