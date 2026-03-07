@@ -11,7 +11,6 @@ import frc.robot.Constants.BeltConstants;
 import frc.robot.Constants.HerderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.GenericMotorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.BeltSubsystem;

@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.PIDController;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -91,10 +92,11 @@ public class SwerveSubsystem extends SubsystemBase {
       }, odometer.getPoseMeters());
 
   private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
+  // PID controller for aiming (operates in degrees)
+  private PIDController aimPid;
   private RobotConfig config;
 
-  private Integer rotationmt1 = 0;
-  private double angleOffsetFinal_1 = 0.0;
+  private Integer zeroHeadingBasedOnVision = 0;
 
   public SwerveSubsystem() {
     // used to link odometry with limelight for better pose estimation.
@@ -110,7 +112,7 @@ public class SwerveSubsystem extends SubsystemBase {
           } else {
             zeroHeading(0);
           }
-          rotationmt1 = 0;
+          zeroHeadingBasedOnVision = 0;
         }
 
       } catch (Exception e) {
@@ -143,22 +145,20 @@ public class SwerveSubsystem extends SubsystemBase {
           return false;
         },
         this);
+
+  // Aim PID (degrees)
+  aimPid = new PIDController(0.5, 0.1, 0.0);
+  aimPid.enableContinuousInput(-180.0, 180.0);
   }
 
   public void zeroHeading(double angleAdjustment) {
     gyro.reset();
     gyro.setAngleAdjustment(-angleAdjustment);
-    //angleOffsetFinal_1 = angleAdjustment;
-
   }
 
   // gets the heading returned as the gyro reading remainder after being divided
   // by 360
-  // that way it always reads from 0 to 360
-  // or 0 to -360
   public double getHeading() {
-    // this being negative screws with the gyro. - J
-    //double actual_rotation = angleOffsetFinal_1 - gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", -gyro.getAngle());
     return Math.IEEEremainder(-gyro.getAngle(), 360);
   }
@@ -250,14 +250,14 @@ public class SwerveSubsystem extends SubsystemBase {
       m_poseEstimator.addVisionMeasurement(
           mt1.pose,
           mt1.timestampSeconds);
-      if (rotationmt1 == 10) {
+      if (zeroHeadingBasedOnVision == 10) {
         zeroHeading(mt1.pose.getRotation().getDegrees());
-        rotationmt1 = 11;
-      } else if (rotationmt1 < 10) {
-        rotationmt1++;
+        zeroHeadingBasedOnVision = 11;
+      } else if (zeroHeadingBasedOnVision < 10) {
+        zeroHeadingBasedOnVision++;
       }
     }
-    SmartDashboard.putNumber("Orientation Updated", rotationmt1);
+    SmartDashboard.putNumber("Orientation Updated", zeroHeadingBasedOnVision);
     SmartDashboard.putNumber("x pose", m_poseEstimator.getEstimatedPosition().getX());
     SmartDashboard.putNumber("y pose", m_poseEstimator.getEstimatedPosition().getY());
     SmartDashboard.putNumber("rotation pose", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees());
@@ -283,7 +283,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void enableReset() {
-    rotationmt1 = 0;
+    zeroHeadingBasedOnVision = 0;
   }
 
   public void stopModules() {
@@ -294,35 +294,38 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Compute and log some simple diagnostic swerve module states for quick bench tests.
-   * It prints desired wheel speeds and angles for a few representative chassis commands.
+   * Compute the angular offset (in degrees) between the robot's current heading
+   * and the heading required to face the given goal pose. Also publishes
+   * desired/offset angles to SmartDashboard for debugging.
+   *
+   * @param goalPose goal pose in field coordinates
+   * @return offset in degrees (robotHeading - desiredHeading)
    */
-  public void logDiagnosticStates() {
-    ChassisSpeeds[] tests = new ChassisSpeeds[] {
-        // forward 1 m/s
-        new ChassisSpeeds(1.0, 0.0, 0.0),
-        // left 1 m/s
-        new ChassisSpeeds(0.0, 1.0, 0.0),
-        // rotate 1 rad/s
-        new ChassisSpeeds(0.0, 0.0, 1.0)
-    };
+  public double getAimOffsetDegrees(Pose2d goalPose) {
+    Pose2d robotPose = getPose();
+    Rotation2d desiredRotation2d = robotPose.relativeTo(goalPose).getTranslation().getAngle()
+        .minus(Rotation2d.k180deg);
+    double testDegrees = desiredRotation2d.getDegrees();
+    double offsetDegrees = robotPose.getRotation().minus(desiredRotation2d).getDegrees();
 
-    String[] names = new String[] {"Forward_1mps", "Left_1mps", "Rotate_1rps"};
+    SmartDashboard.putNumber("Desired Robot Angle", testDegrees);
+    SmartDashboard.putNumber("Offset Angle", offsetDegrees);
 
-    for (int t = 0; t < tests.length; t++) {
-      SwerveModuleState[] states = DriveConstants.kDriveKinematics.toSwerveModuleStates(tests[t]);
-      SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+    return offsetDegrees;
+  }
 
-      StringBuilder sb = new StringBuilder();
-      sb.append(names[t]).append(":\n");
-      for (int i = 0; i < states.length; i++) {
-        sb.append(String.format("  Module %d: speed=%.3fm/s angle=%.1fdeg\n", i, states[i].speedMetersPerSecond,
-            states[i].angle.getDegrees()));
-      }
-      // Console and SmartDashboard for easy visibility
-      System.out.print(sb.toString());
-      SmartDashboard.putString("SwerveDiag/" + names[t], sb.toString());
-    }
+  /**
+   * Compute a turning speed (in the same units the joystick code expects) to aim at the given goal.
+   * This uses the internal aim PID controller and also publishes the Goal Speed to SmartDashboard.
+   *
+   * @param goalPose goal pose in field coordinates
+   * @return turning speed (unitless as used by SwerveJoystickCmd)
+   */
+  public double getAimTurningSpeed(Pose2d goalPose) {
+    double offsetDegrees = getAimOffsetDegrees(goalPose);
+    double turningSpeed = aimPid.calculate(offsetDegrees, 0.0) / -60.0;
+    SmartDashboard.putNumber("Goal Speed", turningSpeed);
+    return turningSpeed;
   }
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeed) {

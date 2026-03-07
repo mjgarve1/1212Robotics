@@ -29,17 +29,10 @@ public final class Constants {
 
     public static final double kDriveMotorGearRatio = 1 / 6.75;
     public static final double kTurningMotorGearRatio = (1 / (150.0 / 7));
-
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-
-    // Used as position conversion factor
     public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
-
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
     public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
-
-    // wtf this do
-    // its our p term for the pid for turning - J
     public static final double kPTurning = 0.3;
 
   }
@@ -60,8 +53,10 @@ public final class Constants {
     public static double kShooterMotorSpeed = 1.0;
     public static double kNegativeShooterMotorSpeed = -0.5;
     public static final Pose2d RED_GOAL_POSE = new Pose2d(11.9, 4.03, new Rotation2d());
-    //Find Blue Goal Pose
+    //TODO: Find Blue Goal Pose
     public static final Pose2d BLUE_GOAL_POSE = new Pose2d(11.9, 4.03, new Rotation2d());
+
+    //TODO: Find max and min goal distance empirically by testing the robot on the field and seeing what the range of distances is that the robot can reliably shoot from
     public static final double kMaxGoalDistance = 8.0;
     public static final double kMinGoalDistance = 1.0;
 
@@ -74,42 +69,6 @@ public final class Constants {
     public static double kBeltOutSpeed = -0.5;
 
   }
-
-  // public static class LimelightConstants{
-  //
-  // /Height in meters
-  // /when using april tags for distance, all units should be in meters - J
-  // / Coral Station ID: 1, 2, 12, 13 1.35 meters
-  // / Processor ID: 3, 16 1.17 m
-  // / Reef ID: 6 - 11, 17-22 .17 m
-  // / Barge ID: 4, 5, 14, 15 1.78 m
-  // */
-  // private static double[] kAprilTagHeight = {
-  // 0, //indexing starts at 0, so we just skip that in the array. - J
-  // 1.35, //1
-  // 1.35, //2
-  // 1.17, //3
-  // 1.78, //4
-  // 1.78, //5
-  // .17, //6
-  // .17, //7
-  // .17, //8
-  // .17, //9
-  // .17, //10
-  // .17, //11
-  // 1.35, //12
-  // 1.35, //13
-  // 1.78, //14
-  // 1.78, //15
-  // 1.17, //16
-  // .17, //17
-  // .17, //18
-  // .17, //19
-  // .17, //20
-  // .17, //21
-  // .17, //22
-  // };
-  // }
 
   public static class DriveConstants {
     // Distance between right and left wheels
@@ -247,7 +206,6 @@ public final class Constants {
     public static final int kDriverControllerOnePort = 0;
     public static final int kDriverControllerTwoPort = 1;
 
-    // april tag follower button
     // Controller One Axis Definitions
     public static final int kRobotForwardAxis = XboxControllerMappingConstants.LEFT_STICK_Y;
     public static final int kRobotSidewaysAxis = XboxControllerMappingConstants.LEFT_STICK_X;

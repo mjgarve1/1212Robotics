@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.Rotation;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -31,7 +30,7 @@ public class SwerveJoystickCmd extends Command {
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
   private final Supplier<Boolean> fieldOrientedFunction, fineDrivingFunction;
   private final Supplier<Boolean> aimAtGoalFunction;
-  private PIDController turningPidController;
+  //private PIDController turningPidController;
   private boolean previousFineDrivingState, fineDrivingState;
   private final SlewRateLimiter xLimiter, yLimiter, tLimiter;
 
@@ -53,8 +52,8 @@ public class SwerveJoystickCmd extends Command {
     previousFineDrivingState = false;
     fineDrivingState = false;
     addRequirements(swerveSubsystem);
-    turningPidController = new PIDController(0.5, 0.1, 0);
-    turningPidController.enableContinuousInput(-180.0, 180.0);
+    //turningPidController = new PIDController(0.5, 0.1, 0);
+    //turningPidController.enableContinuousInput(-180.0, 180.0);
   }
 
   // Called when the command is initially scheduled.
@@ -93,26 +92,32 @@ public class SwerveJoystickCmd extends Command {
       ySpeed /= DriveConstants.kFineDriving;
     }
 
-    Pose2d robotPose = swerveSubsystem.getPose();
+    // Pose2d robotPose = swerveSubsystem.getPose();
+    // Pose2d goalPose = ShooterConstants.BLUE_GOAL_POSE;
+    // if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+    //   goalPose = ShooterConstants.RED_GOAL_POSE;
+    // }
+    // Rotation2d desiredRotation2d = robotPose.relativeTo(goalPose).getTranslation().getAngle()
+    //     .minus(Rotation2d.k180deg);
+    // double testDegrees = desiredRotation2d.getDegrees();
+    // double offsetDegrees = robotPose.getRotation().minus(desiredRotation2d).getDegrees();
+
+    // SmartDashboard.putNumber("Desired Robot Angle", testDegrees);
+    // SmartDashboard.putNumber("Offset Angle", offsetDegrees);
+
+    // if (aimAtGoalFunction.get()) {
+    //   turningSpeed = turningPidController.calculate(offsetDegrees, 0.0) / -60.0;
+
+    //   SmartDashboard.putNumber("Goal Speed", turningSpeed);
+    // }
     Pose2d goalPose = ShooterConstants.BLUE_GOAL_POSE;
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
       goalPose = ShooterConstants.RED_GOAL_POSE;
     }
-    Rotation2d desiredRotation2d = robotPose.relativeTo(goalPose).getTranslation().getAngle()
-        .minus(Rotation2d.k180deg);
-    double testDegrees = desiredRotation2d.getDegrees();
-    double offsetDegrees = robotPose.getRotation().minus(desiredRotation2d).getDegrees();
 
-    SmartDashboard.putNumber("Desired Robot Angle", testDegrees);
-    SmartDashboard.putNumber("Offset Angle", offsetDegrees);
-
+    // If aiming mode is enabled, ask the subsystem for the computed turning speed
     if (aimAtGoalFunction.get()) {
-      // TEST DRIVING COMMENT
-      // Curious if doing .calculate(robotPose.getRotation().getDegrees(),
-      // desiredRotation2d.getDegrees()) would be a better approach, worth a try?
-      turningSpeed = turningPidController.calculate(offsetDegrees, 0.0) / -60.0;
-
-      SmartDashboard.putNumber("Goal Speed", turningSpeed);
+      turningSpeed = swerveSubsystem.getAimTurningSpeed(goalPose);
     }
 
     // 2. Make the driving smoother

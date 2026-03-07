@@ -42,6 +42,11 @@ public class DriveForwardUntilVisionCmd extends Command {
 
     // If gotVision is true, then you can rotate the robot and use its distance to calculate how to shoot the balls.
     if (gotVision) {
+      // swerveSubsystem.getAimTurningSpeed(goalPose); can get you the rotation needed to aim at the goal based on the vision pose estimate
+      // swerveSubsystem.getGoalDistance(); can get you the distance to the goal
+      // You want to have getAimTurningSpeed to be almost 0 (meaning you are pointing directly at the goal)
+      // After that, drive the robot forward until you get to the desired shooting distance
+      // Once you are at the desired shooting distance, start shooting!
 
     }
   }

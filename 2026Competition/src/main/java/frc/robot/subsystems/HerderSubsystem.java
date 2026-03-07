@@ -36,6 +36,7 @@ public class HerderSubsystem extends SubsystemBase{
   }
 
   public void setWinchSpeed(double speed){
+    //TODO: Determine the encoder position limits for the winch and implement logic to prevent the winch from moving beyond those limits
     winchMotor.set(speed);
   }
 

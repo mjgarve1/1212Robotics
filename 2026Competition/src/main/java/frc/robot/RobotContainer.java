@@ -19,16 +19,12 @@ import frc.robot.Constants.HerderConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.GenericJoystickCmd;
-import frc.robot.commands.GenericMotorMoveCmd;
 import frc.robot.commands.ResetGyroCmd;
 import frc.robot.commands.ShooterJoystickCmd;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.BeltSubsystem;
-import frc.robot.subsystems.GenericMotorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.commands.SwerveDiagnosticsCmd;
 import frc.robot.subsystems.HerderSubsystem;
 import frc.robot.commands.WinchJoystickCmd;
 
@@ -87,34 +83,16 @@ public class RobotContainer {
     herderSubsystem.setDefaultCommand(new WinchJoystickCmd(
       herderSubsystem,
       () -> driverJoystickTwo.getRawAxis(OIConstants.kWinchAxis)));
-    // PROGRAMMER COMMENT
-    // Much like the comment below in the buttons function, this too can be created for
-    // multiple subsystems corresponding to the same joystick input and you can
-    // reverse the joystick input to drive the motor "mirrored"
-    // Below is sample code to do it for a second motor
-
-    // herderSubsystemTwo.setDefaultCommand(new GenericJoystickCmd(
-    // herderSubsystemTwo,
-    // () -> -driverJoystickTwo.getRawAxis(OIConstants.kRobotForwardAxis)));
-
-    // shooterSubsystem.setDefaultCommand(new ShooterJoystickCmd(
-    //   shooterSubsystem,
-    //   () -> driverJoystickTwo.getRawButton(OIConstants.kShooterMotorButton) ? 1.0 : 0.0));
-    // Creates all named commands for pathPlanner
-    // Lets fix everything else before we touch this....
-
-    // Set up autonomous mode to be able to do something
-    // Lets fix everything else before we touch this....
     autosChooser = new SendableChooser<>();
     midAuto = Autos.middleAuto(swerveSubsystem);
     taxiAuto = Autos.taxiAuto(swerveSubsystem);
   visionAcquireAuto = Autos.visionAcquireAuto(swerveSubsystem);
 
     // Default to Middle Auto, which works out to drive the robot forward
-    autosChooser.setDefaultOption("Vision Acquire Auto", midAuto);
+    autosChooser.setDefaultOption("Vision Acquire Auto", visionAcquireAuto);
     // No idea what taxiAuto is, figure it out later
     autosChooser.addOption("taxiAuto", taxiAuto);
-  autosChooser.addOption("Vision Acquire Auto", visionAcquireAuto);
+    autosChooser.addOption("Vision Acquire Auto", visionAcquireAuto);
 
     // Add the ability to swap these around (useful in competition to choose
     // a different autonomous operation depending on starting position)
@@ -134,19 +112,6 @@ public class RobotContainer {
   /// on to off OR off to on etc...)
   private void configureBindings() {
     // Controller One Button Mapping
-
-
-
-    // PROGRAMMER COMMENT
-    // For example, you can duplicate the above code and create herderSubsystemTwo
-    // where herderSubsystemTwo is assigned to SparkMax ID 101, and then invert the
-    // speed that you send:
-
-    // new JoystickButton(driverJoystickOne, OIConstants.kHerderIn)
-    // .whileTrue(new GenericMotorMoveCmd(herderSubsystemTwo, -kHerderInSpeed));
-
-    // new JoystickButton(driverJoystickOne, OIConstants.kHerderOut)
-    // .whileTrue(new GenericMotorMoveCmd(herderSubsystemTwo, HerderConstants.kHerderOutSpeed));
 
     // While this button is pressed, reset the gyro used to tell the robot which
     // direction is forward

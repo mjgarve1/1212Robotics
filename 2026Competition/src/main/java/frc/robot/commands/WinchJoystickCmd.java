@@ -7,13 +7,7 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.BeltConstants;
-import frc.robot.Constants.HerderConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.GenericMotorSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.BeltSubsystem;
 import frc.robot.subsystems.HerderSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -40,6 +34,7 @@ public class WinchJoystickCmd extends Command {
     double herdSpeed = m_herdFunction.get();
     //2. apply deadband
     herdSpeed = Math.abs(herdSpeed) > OIConstants.kControllerAxisDeadband ? herdSpeed : 0.0;
+
     m_herderSubsystem.setWinchSpeed(herdSpeed);
   }
 
