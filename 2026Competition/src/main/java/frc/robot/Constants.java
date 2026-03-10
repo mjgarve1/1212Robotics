@@ -41,8 +41,8 @@ public final class Constants {
     public static int kHerderMotorPort = 50;
     public static int kWinchMotorPort = 52;
 
-    public static double kHerderOutSpeed = 0.5;
-    public static double kHerderInSpeed = -0.5;
+    public static double kHerderOutSpeed = 0.9; // changed from 0.1
+    public static double kHerderInSpeed = -0.9; // changed from -0.1
 
   }
  
@@ -50,8 +50,8 @@ public final class Constants {
     public static int kShooter1MotorPort = 30;
     public static int kShooter2MotorPort = 31;
 
-    public static double kShooterMotorSpeed = 1.0;
-    public static double kNegativeShooterMotorSpeed = -0.5;
+    public static double kShooterMotorSpeed = -1; //changed direction to neg
+    public static double kBackShooterMotorSpeed = 0.2; //changed from -0.5 to 0.5
     public static final Pose2d RED_GOAL_POSE = new Pose2d(11.915, 4.03, new Rotation2d());
     public static final Pose2d BLUE_GOAL_POSE = new Pose2d(4.603, 4.03, new Rotation2d());
 
@@ -64,8 +64,8 @@ public final class Constants {
     public static int kBelt1MotorPort = 40;
     public static int kBelt2MotorPort = 41;
 
-    public static double kBeltInSpeed = 0.5;
-    public static double kBeltOutSpeed = -0.5;
+    public static double kBeltInSpeed = 0.8; // changed from .5
+    public static double kBeltOutSpeed = -1; // 0.5 to 0.8 to 1
 
   }
 
