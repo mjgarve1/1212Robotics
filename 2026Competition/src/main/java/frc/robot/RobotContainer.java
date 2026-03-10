@@ -86,7 +86,7 @@ public class RobotContainer {
     autosChooser = new SendableChooser<>();
     midAuto = Autos.middleAuto(swerveSubsystem);
     taxiAuto = Autos.taxiAuto(swerveSubsystem);
-  visionAcquireAuto = Autos.visionAcquireAuto(swerveSubsystem);
+  visionAcquireAuto = Autos.visionAcquireAuto(swerveSubsystem, beltSubsystem, shooterSubsystem);
 
     // Default to Middle Auto, which works out to drive the robot forward
     autosChooser.setDefaultOption("Vision Acquire Auto", visionAcquireAuto);

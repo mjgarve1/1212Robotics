@@ -52,9 +52,8 @@ public final class Constants {
 
     public static double kShooterMotorSpeed = 1.0;
     public static double kNegativeShooterMotorSpeed = -0.5;
-    public static final Pose2d RED_GOAL_POSE = new Pose2d(11.9, 4.03, new Rotation2d());
-    //TODO: Find Blue Goal Pose
-    public static final Pose2d BLUE_GOAL_POSE = new Pose2d(11.9, 4.03, new Rotation2d());
+    public static final Pose2d RED_GOAL_POSE = new Pose2d(11.915, 4.03, new Rotation2d());
+    public static final Pose2d BLUE_GOAL_POSE = new Pose2d(4.603, 4.03, new Rotation2d());
 
     //TODO: Find max and min goal distance empirically by testing the robot on the field and seeing what the range of distances is that the robot can reliably shoot from
     public static final double kMaxGoalDistance = 8.0;

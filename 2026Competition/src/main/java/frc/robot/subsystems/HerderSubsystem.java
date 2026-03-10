@@ -36,6 +36,11 @@ public class HerderSubsystem extends SubsystemBase{
   }
 
   public void setWinchSpeed(double speed){
+    double maxWinchLimit = 10; //example, find real limit
+    double minWinchLimit = 0;
+    if (winchEncoder.getPosition() > maxWinchLimit || winchEncoder.getPosition() < minWinchLimit) {
+      speed = 0;
+    }
     //TODO: Determine the encoder position limits for the winch and implement logic to prevent the winch from moving beyond those limits
     winchMotor.set(speed);
   }
