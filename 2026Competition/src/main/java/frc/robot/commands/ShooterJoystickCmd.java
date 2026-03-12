@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.BeltConstants;
 import frc.robot.Constants.HerderConstants;
@@ -23,17 +24,19 @@ public class ShooterJoystickCmd extends Command {
   private final ShooterSubsystem m_shooterSubsystem;
   private final Supplier<Double> m_shootFunction;
   private final Supplier<Double> m_herdFunction;
+  private final Supplier<Double> m_winchFunction;
   private final Supplier<Boolean> m_dumpFunction;
   private final BeltSubsystem m_beltSubsystem;
   private final HerderSubsystem m_herderSubsystem;
   private final SwerveSubsystem m_swerveSubsystem;
   public ShooterJoystickCmd(ShooterSubsystem shooterSubsystem, 
-  BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Boolean> dumpFunction) {
+  BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Boolean> dumpFunction, Supplier<Double> winchFunction) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooterSubsystem = shooterSubsystem;
     m_shootFunction = shootFunction;
     m_herdFunction = herdFunction;
     m_dumpFunction = dumpFunction;
+    m_winchFunction = winchFunction;
     m_swerveSubsystem = swerveSubsystem;
     m_beltSubsystem = beltSubsystem;
     m_herderSubsystem = herderSubsystem;
@@ -55,17 +58,7 @@ public class ShooterJoystickCmd extends Command {
     if(Math.abs(shootSpeed) > OIConstants.kTriggerDeadband) {
       m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
       m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
-      // calculate shooter speed based on distance to goal
-      double distanceToGoal = m_swerveSubsystem.getGoalDistance();
-      // simple linear relationship between distance and shooter speed (tune as necessary)
-      double shooterSpeed = ShooterConstants.kShooterMotorSpeed * (distanceToGoal / ShooterConstants.kMaxGoalDistance);
-      if(distanceToGoal > ShooterConstants.kMaxGoalDistance) {
-        shooterSpeed = ShooterConstants.kShooterMotorSpeed; // cap at max speed
-      }
-      else if(distanceToGoal < ShooterConstants.kMinGoalDistance) {
-        shooterSpeed = ShooterConstants.kShooterMotorSpeed * 0.1; // minimum speed to prevent jamming
-      }
-      m_shooterSubsystem.setSpeed(shooterSpeed);
+      m_shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed);
     }
     else if (Math.abs(herdSpeed) > OIConstants.kTriggerDeadband) {
       m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
@@ -82,6 +75,10 @@ public class ShooterJoystickCmd extends Command {
       m_beltSubsystem.setSpeed(0);
       m_herderSubsystem.setHerderSpeed(0);
     }
+
+    double winchSpeed = m_winchFunction.get();
+    winchSpeed = Math.abs(winchSpeed) > OIConstants.kControllerAxisDeadband ? winchSpeed : 0.0;
+    m_herderSubsystem.setWinchSpeed(winchSpeed/10);
     
   }
 

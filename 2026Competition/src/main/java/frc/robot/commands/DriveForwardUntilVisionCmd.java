@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.BeltConstants;
@@ -20,6 +21,7 @@ public class DriveForwardUntilVisionCmd extends Command {
   private final SwerveSubsystem swerve; 
   private final ShooterSubsystem shooter;
   private final BeltSubsystem belt;
+  private boolean shootNow = false;
   private final Timer timer = new Timer();
   private boolean gotVision = false;
 
@@ -27,7 +29,7 @@ public class DriveForwardUntilVisionCmd extends Command {
     this.swerve = swerve;
     this.belt = belt;
     this.shooter = shooter;
-    addRequirements(swerve);
+    addRequirements(swerve, belt, shooter);
   }
 
   @Override
@@ -35,24 +37,33 @@ public class DriveForwardUntilVisionCmd extends Command {
     timer.reset();
     timer.start();
     gotVision = false;
+    shootNow = false;
   }
 
   @Override
   public void execute() {
     ChassisSpeeds speeds;
+    double invert = -1.0;
     if( !timer.hasElapsed(2.0) && !gotVision)
     {
-    // Drive forward at 1 m/s (field-relative handled in subsystem)
-    speeds = new ChassisSpeeds(1.0, 0.0, 0.0);
-    swerve.setChassisSpeed(speeds);
-    swerve.setModuleStates();
+      // Drive forward at 1 m/s (field-relative handled in subsystem)
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+        speeds = new ChassisSpeeds(1.0, 0.0, 0.0);
+      }
+      else
+      {
+        
+        speeds = new ChassisSpeeds(1.0, 0.0, 0.0);
+      }
+      swerve.setChassisSpeed(speeds);
+      swerve.setModuleStates();
     }
     else if (!gotVision)
     {
-    speeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-    swerve.setChassisSpeed(speeds);
-    swerve.setModuleStates();
-
+      speeds = new ChassisSpeeds(0.0, 0.0, 1.0);
+      swerve.setChassisSpeed(speeds);
+      swerve.setModuleStates();
     }
 
     // Poll Limelight for a pose estimate (blue frame)
@@ -63,18 +74,32 @@ public class DriveForwardUntilVisionCmd extends Command {
       swerve.resetPose(est.pose);
       gotVision = true;
     }
+    SmartDashboard.putBoolean("ShootNow", shootNow);
+    SmartDashboard.putBoolean("GotVision", gotVision);
 
     var alliance = DriverStation.getAlliance();
     Pose2d goalPose = ShooterConstants.BLUE_GOAL_POSE;
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
       goalPose = ShooterConstants.RED_GOAL_POSE;
+      invert = -1.0;
     }
     // If gotVision is true, then you can rotate the robot and use its distance to calculate how to shoot the balls.
     if (gotVision) {
       double distance = swerve.getGoalDistance();
       double turningSpeed = swerve.getAimTurningSpeed(goalPose);
-      double GoodDistanceHere = 2.0;
-      if (Math.abs(turningSpeed) > 0.1) {
+      double GoodDistanceHere = 1.3;
+      if(shootNow)
+      {
+        
+        //We are in range and looking at the goal, stop driving, shoot the bucket
+        speeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+        swerve.setChassisSpeed(speeds);
+        swerve.setModuleStates();
+        
+        belt.setSpeed(BeltConstants.kBeltInSpeed);
+        shooter.setSpeed(ShooterConstants.kShooterMotorSpeed);
+      }
+      else if (Math.abs(turningSpeed) > 0.15) {
         //If it wants to rotate quite a bit, only rotate
         speeds = new ChassisSpeeds(0.0, 0.0, turningSpeed);
         swerve.setChassisSpeed(speeds);
@@ -82,35 +107,14 @@ public class DriveForwardUntilVisionCmd extends Command {
       }
       else if (distance > GoodDistanceHere) {
         //If it doesnt need to rotate, drive forward until its in range
-        speeds = new ChassisSpeeds(1.0, 0.0, 0.0);
+        speeds = new ChassisSpeeds(invert, 0.0, 0.0);
         swerve.setChassisSpeed(speeds);
         swerve.setModuleStates();
       }
       else
       {
-        //We are in range and looking at the goal, stop driving, shoot the bucket
-        speeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-        swerve.setChassisSpeed(speeds);
-        swerve.setModuleStates();
-        belt.setSpeed(BeltConstants.kBeltInSpeed);
-      // calculate shooter speed based on distance to goal
-      double distanceToGoal = swerve.getGoalDistance();
-      // simple linear relationship between distance and shooter speed (tune as necessary)
-      double shooterSpeed = ShooterConstants.kShooterMotorSpeed * (distanceToGoal / ShooterConstants.kMaxGoalDistance);
-      if(distanceToGoal > ShooterConstants.kMaxGoalDistance) {
-        shooterSpeed = ShooterConstants.kShooterMotorSpeed; // cap at max speed
+        shootNow = true;
       }
-      else if(distanceToGoal < ShooterConstants.kMinGoalDistance) {
-        shooterSpeed = ShooterConstants.kShooterMotorSpeed * 0.1; // minimum speed to prevent jamming
-      }
-      shooter.setSpeed(shooterSpeed);
-      }
-      // make speed calculation code and THENN do shooting based on distance
-      // swerveSubsystem.getAimTurningSpeed(goalPose); can get you the rotation needed to aim at the goal based on the vision pose estimate
-      // swerveSubsystem.getGoalDistance(); can get you the distance to the goal
-      // You want to have getAimTurningSpeed to be almost 0 (meaning you are pointing directly at the goal)
-      // After that, drive the robot forward until you get to the desired shooting distance
-      // Once you are at the desired shooting distance, start shooting!
 
     }
   }

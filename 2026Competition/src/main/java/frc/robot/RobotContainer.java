@@ -26,7 +26,6 @@ import frc.robot.subsystems.BeltSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.HerderSubsystem;
-import frc.robot.commands.WinchJoystickCmd;
 
 // This class is where the bulk of the robot should be declared. Since Command-based is a
 // "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -78,11 +77,9 @@ public class RobotContainer {
       shooterSubsystem, beltSubsystem, herderSubsystem, swerveSubsystem,
       () -> driverJoystickTwo.getRawAxis(OIConstants.kShootFuelButton),
       () -> driverJoystickTwo.getRawAxis(OIConstants.kHerdFuelButton),
-      () -> driverJoystickTwo.getRawButton(OIConstants.kDumpFuelButton))
+      () -> driverJoystickTwo.getRawButton(OIConstants.kDumpFuelButton),
+      () -> driverJoystickTwo.getRawAxis(OIConstants.kWinchAxis))
       );
-    herderSubsystem.setDefaultCommand(new WinchJoystickCmd(
-      herderSubsystem,
-      () -> driverJoystickTwo.getRawAxis(OIConstants.kWinchAxis)));
     autosChooser = new SendableChooser<>();
     midAuto = Autos.middleAuto(swerveSubsystem);
     taxiAuto = Autos.taxiAuto(swerveSubsystem);
