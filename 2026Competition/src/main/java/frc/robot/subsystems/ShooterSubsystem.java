@@ -8,6 +8,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -41,6 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void spinMotor(double speed) {
         shooterMotorLeader.set(speed);
         shooterMotorFollower.set(speed);
+  
     }
     public double getEncoderPosition(){
     return encoder.getPosition();
@@ -53,6 +55,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setSpeed(double speed){
     shooterMotorLeader.set(speed);
     shooterMotorFollower.set(speed);
+     double leaderCurrent = shooterMotorLeader.getOutputCurrent();
+        SmartDashboard.putNumber("leader current", leaderCurrent);
+        double followerCurrent = shooterMotorFollower.getOutputCurrent();
+        SmartDashboard.putNumber("follower current", followerCurrent);
   }
 
   public void calculateAndSetSpeed(SwerveSubsystem swerveSubsystem) {

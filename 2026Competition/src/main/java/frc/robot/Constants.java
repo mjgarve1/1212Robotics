@@ -50,8 +50,8 @@ public final class Constants {
     public static int kShooter1MotorPort = 30;
     public static int kShooter2MotorPort = 31;
 
-    public static double kShooterMotorSpeed = -0.70; //changed direction to neg
-    public static double kShooterMotorSpeedAuto = -0.85; //changed direction to neg
+    public static double kShooterMotorSpeed = -0.7; //changed direction to neg
+    public static double kShooterMotorSpeedAuto = -0.75; //changed direction to neg, changed from .85
     public static double kBackShooterMotorSpeed = 0.2; //changed from -0.5 to 0.5
     public static final Pose2d RED_GOAL_POSE = new Pose2d(11.915, 4.03, new Rotation2d());
     public static final Pose2d BLUE_GOAL_POSE = new Pose2d(4.603, 4.03, new Rotation2d());
@@ -91,7 +91,7 @@ public final class Constants {
     new Translation2d(-kWheelBase / 2.0, -kTrackWidth / 2.0)
   );
 
-    public static final double kPhysicalMaxSpeedMetersPerSecond = 3;
+    public static final double kPhysicalMaxSpeedMetersPerSecond = 7;
     public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
     public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond;
@@ -99,8 +99,8 @@ public final class Constants {
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = kPhysicalMaxSpeedMetersPerSecond;
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 5;
 
-    public static final double kFineTurning = 3;
-    public static final double kFineDriving = 8;
+    public static final double kFineTurning = 1;
+    public static final double kFineDriving = 1;
 
     public static final double kAimAtGoalP = 4.0;
 

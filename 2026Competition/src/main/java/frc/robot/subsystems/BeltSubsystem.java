@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BeltSubsystem extends SubsystemBase{
@@ -24,8 +25,10 @@ public class BeltSubsystem extends SubsystemBase{
     config = new SparkMaxConfig();
 
     config.idleMode(IdleMode.kBrake);
+    config.smartCurrentLimit(20,30);  //limit current for beltmotor
 
     beltMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    beltMotor2.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 
@@ -40,6 +43,10 @@ public class BeltSubsystem extends SubsystemBase{
   public void setSpeed(double speed){
     beltMotor.set(speed);
     beltMotor2.set(-speed);
+    double belt1Current = beltMotor.getOutputCurrent();
+    SmartDashboard.putNumber("belt 1 current", belt1Current);
+    double belt2Current = beltMotor2.getOutputCurrent();
+    SmartDashboard.putNumber("belt 2 current", belt2Current);
   }
 
   @Override

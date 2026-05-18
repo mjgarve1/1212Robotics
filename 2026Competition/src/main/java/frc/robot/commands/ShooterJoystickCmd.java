@@ -63,7 +63,7 @@ public class ShooterJoystickCmd extends Command {
     else if (Math.abs(herdSpeed) > OIConstants.kTriggerDeadband) {
       m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
       m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
-      m_shooterSubsystem.setSpeed(ShooterConstants.kBackShooterMotorSpeed);
+      //m_shooterSubsystem.setSpeed(ShooterConstants.kBackShooterMotorSpeed); //comment line disable shooter motors during herding
     }
     else if(dump) {
       m_beltSubsystem.setSpeed(BeltConstants.kBeltOutSpeed);
@@ -78,7 +78,7 @@ public class ShooterJoystickCmd extends Command {
 
     double winchSpeed = m_winchFunction.get();
     winchSpeed = Math.abs(winchSpeed) > OIConstants.kControllerAxisDeadband ? winchSpeed : 0.0;
-    m_herderSubsystem.setWinchSpeed(winchSpeed/10);
+    m_herderSubsystem.setWinchSpeed(winchSpeed/5); // down from 10
     
   }
 
@@ -87,6 +87,7 @@ public class ShooterJoystickCmd extends Command {
   public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
+
   @Override
   public boolean isFinished() {
     return false;

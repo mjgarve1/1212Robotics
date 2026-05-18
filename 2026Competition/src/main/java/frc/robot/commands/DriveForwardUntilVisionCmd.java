@@ -97,9 +97,9 @@ public class DriveForwardUntilVisionCmd extends Command {
         swerve.setModuleStates();
         
         belt.setSpeed(BeltConstants.kBeltInSpeed);
-        shooter.setSpeed(ShooterConstants.kShooterMotorSpeed);
+        shooter.setSpeed(ShooterConstants.kShooterMotorSpeedAuto); // changed from shootermotorspeed to be slower in auto
       }
-      else if (Math.abs(turningSpeed) > 0.15) {
+      else if (Math.abs(turningSpeed) > 0.1) { //changed from .15
         //If it wants to rotate quite a bit, only rotate
         speeds = new ChassisSpeeds(0.0, 0.0, turningSpeed);
         swerve.setChassisSpeed(speeds);
@@ -127,6 +127,6 @@ public class DriveForwardUntilVisionCmd extends Command {
   @Override
   public boolean isFinished() {
     // Finish if we got a vision estimate or 2 seconds have elapsed
-    return false;
+    return false; 
   }
 }

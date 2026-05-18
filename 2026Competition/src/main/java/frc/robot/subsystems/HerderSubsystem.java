@@ -35,6 +35,8 @@ public class HerderSubsystem extends SubsystemBase{
 
   public void setHerderSpeed(double speed){
     herderMotor.set(speed);
+    double herderCurrent = herderMotor.getOutputCurrent();
+    SmartDashboard.putNumber("herder current", herderCurrent);
   }
 
   public void setWinchSpeed(double speed){
@@ -50,7 +52,9 @@ public class HerderSubsystem extends SubsystemBase{
     winchMotor.set(speed);
     SmartDashboard.putNumber("Winch", winchEncoder.getPosition());
     SmartDashboard.putNumber("Winch Speed", speed);
-  }
+    double winchCurrent = winchMotor.getOutputCurrent();
+    SmartDashboard.putNumber("winch current", winchCurrent);
+    }
 
   public double getWinchEncoderPosition(){
     double position = winchEncoder.getPosition();
@@ -58,10 +62,12 @@ public class HerderSubsystem extends SubsystemBase{
     return position;
   }
 
+ /* public double WinchIn(double speed)
+
   public void resetEncoderPosition(){
     winchEncoder.setPosition(0);
   }
-
+*/
 
   @Override
   public void periodic() {
