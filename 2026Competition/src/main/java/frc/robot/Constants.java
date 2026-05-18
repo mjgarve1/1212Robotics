@@ -224,7 +224,8 @@ public final class Constants {
     public static final int kDumpFuelButton = XboxControllerMappingConstants.LEFT_BUMPER;
 
     public static final int kWinchAxis = XboxControllerMappingConstants.RIGHT_STICK_Y;
-  
+    // winch in button on arms controller
+    //public static final int kWinchInButton = XboxControllerMappingConstants.A;
 
     // Controller Two Button Definitions
     public static final double kTriggerDeadband = 0.25;
