@@ -29,8 +29,9 @@ public class ShooterJoystickCmd extends Command {
   private final BeltSubsystem m_beltSubsystem;
   private final HerderSubsystem m_herderSubsystem;
   private final SwerveSubsystem m_swerveSubsystem;
+  private final Supplier<Boolean> m_reverseFunction;
   public ShooterJoystickCmd(ShooterSubsystem shooterSubsystem, 
-  BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Boolean> dumpFunction, Supplier<Double> winchFunction) {
+  BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Boolean> dumpFunction, Supplier<Double> winchFunction, Supplier<Boolean> reverseFunction) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooterSubsystem = shooterSubsystem;
     m_shootFunction = shootFunction;
@@ -40,6 +41,7 @@ public class ShooterJoystickCmd extends Command {
     m_swerveSubsystem = swerveSubsystem;
     m_beltSubsystem = beltSubsystem;
     m_herderSubsystem = herderSubsystem;
+    m_reverseFunction = reverseFunction;
     addRequirements(shooterSubsystem, beltSubsystem, herderSubsystem);
   }
 
@@ -54,6 +56,7 @@ public class ShooterJoystickCmd extends Command {
     double shootSpeed = m_shootFunction.get();
     double herdSpeed = m_herdFunction.get();
     boolean dump = m_dumpFunction.get();
+    boolean reverse = m_reverseFunction.get();
     //2. apply deadband
     if(Math.abs(shootSpeed) > OIConstants.kTriggerDeadband) {
       m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
@@ -69,6 +72,11 @@ public class ShooterJoystickCmd extends Command {
       m_beltSubsystem.setSpeed(BeltConstants.kBeltOutSpeed);
       m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderOutSpeed);
       m_shooterSubsystem.setSpeed(ShooterConstants.kBackShooterMotorSpeed);
+    }
+    else if (reverse) {
+      m_beltSubsystem.setSpeed(BeltConstants.kBeltOutSpeed);
+      m_shooterSubsystem.setSpeed(ShooterConstants.kBackShooterMotorSpeed);
+      m_herderSubsystem.setHerderSpeed(0);
     }
     else {
       m_shooterSubsystem.setSpeed(0);

@@ -81,7 +81,8 @@ public class RobotContainer {
       () -> driverJoystickTwo.getRawAxis(OIConstants.kShootFuelButton),
       () -> driverJoystickTwo.getRawAxis(OIConstants.kHerdFuelButton),
       () -> driverJoystickTwo.getRawButton(OIConstants.kDumpFuelButton),
-      () -> driverJoystickTwo.getRawAxis(OIConstants.kWinchAxis)
+      () -> driverJoystickTwo.getRawAxis(OIConstants.kWinchAxis),
+      () -> driverJoystickTwo.getRawButton(OIConstants.kReverseButton)
       //() -> driverJoystickTwo.getRawButton(OIConstants.kWinchInButton)) // winch in
       ));
     autosChooser = new SendableChooser<>();

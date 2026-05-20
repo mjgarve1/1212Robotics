@@ -51,7 +51,7 @@ public final class Constants {
     public static int kShooter2MotorPort = 31;
 
     public static double kShooterMotorSpeed = -0.7; //changed direction to neg
-    public static double kShooterMotorSpeedAuto = -0.75; //changed direction to neg, changed from .85
+    public static double kShooterMotorSpeedAuto = -0.7; //changed direction to neg, changed from .85
     public static double kBackShooterMotorSpeed = 0.2; //changed from -0.5 to 0.5
     public static final Pose2d RED_GOAL_POSE = new Pose2d(11.915, 4.03, new Rotation2d());
     public static final Pose2d BLUE_GOAL_POSE = new Pose2d(4.603, 4.03, new Rotation2d());
