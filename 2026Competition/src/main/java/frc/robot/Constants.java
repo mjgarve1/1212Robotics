@@ -229,7 +229,7 @@ public final class Constants {
 
     // Controller Two Button Definitions
     public static final double kTriggerDeadband = 0.25;
-
+    public static final int kReverseButton = XboxControllerMappingConstants.RIGHT_BUMPER;
   }
 
   public static final class AutoConstants {

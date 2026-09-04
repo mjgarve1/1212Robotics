@@ -17,6 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private SparkMax shooterMotorFollower;
     private SparkMaxConfig config;
 
+
     public ShooterSubsystem(int sparkMaxId, int sparkMaxFollowerId) {
         // need id and motor type
         shooterMotorLeader = new SparkMax(sparkMaxId, MotorType.kBrushless);

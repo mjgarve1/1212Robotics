@@ -26,10 +26,11 @@ public class ShooterJoystickCmd extends Command {
   private final Supplier<Double> m_herdFunction;
   private final Supplier<Double> m_winchFunction;
   private final Supplier<Boolean> m_dumpFunction;
+  private final Supplier<Boolean> m_reverseFunction;
   private final BeltSubsystem m_beltSubsystem;
   private final HerderSubsystem m_herderSubsystem;
   private final SwerveSubsystem m_swerveSubsystem;
-  private final Supplier<Boolean> m_reverseFunction;
+
   public ShooterJoystickCmd(ShooterSubsystem shooterSubsystem, 
   BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Boolean> dumpFunction, Supplier<Double> winchFunction, Supplier<Boolean> reverseFunction) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,10 +39,11 @@ public class ShooterJoystickCmd extends Command {
     m_herdFunction = herdFunction;
     m_dumpFunction = dumpFunction;
     m_winchFunction = winchFunction;
+    m_reverseFunction = reverseFunction;
     m_swerveSubsystem = swerveSubsystem;
     m_beltSubsystem = beltSubsystem;
     m_herderSubsystem = herderSubsystem;
-    m_reverseFunction = reverseFunction;
+    
     addRequirements(shooterSubsystem, beltSubsystem, herderSubsystem);
   }
 
