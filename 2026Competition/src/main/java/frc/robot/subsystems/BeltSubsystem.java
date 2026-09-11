@@ -14,17 +14,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class BeltSubsystem extends SubsystemBase{
-  private final SparkMax beltMotor;
-  private final SparkMax beltMotor2;
+  private final SparkMax beltMotorLeader;
+  private final SparkMax beltMotorFollower;
   private final RelativeEncoder beltEncoder;
   private SparkMaxConfig config;
 
-  public BeltSubsystem(int sparkMaxId, int sparkMaxId2) {
-    beltMotor = new SparkMax(sparkMaxId, MotorType.kBrushless);
-    beltMotor2 = new SparkMax(sparkMaxId2, MotorType.kBrushless);
-    beltEncoder = beltMotor.getEncoder();
-    
-    config = new SparkMaxConfig();
+  public BeltSubsystem(int sparkMaxId, int sparkMaxFollowerId) {
+    beltMotorLeader = new SparkMax(sparkMaxId, MotorType.kBrushless);
+    beltMotorFollower = new SparkMax(sparkMaxFollowerId, MotorType.kBrushless); 
+    beltEncoder = beltMotorLeader.getEncoder(); 
+
+    SparkMaxConfig beltMotorLeaderConfig = new SparkMaxConfig();
+    SparkMaxConfig beltMotorFollowerConfig = new SparkMaxConfig();
+
+    beltMotorLeaderConfig
+            .inverted(false);
+
+    beltMotorFollowerConfig
+            .inverted(true);
 
     config.idleMode(IdleMode.kBrake);
     
@@ -34,16 +41,11 @@ public class BeltSubsystem extends SubsystemBase{
     else if (DriverStation.isTeleop()) {
       config.smartCurrentLimit(22,30);  //limit current for beltmotor
     };
-      
     
-      
-
-    
-    beltMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    beltMotor2.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-  }
-
+    beltMotorLeader.configure(beltMotorLeaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    beltMotorFollower.configure(beltMotorFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }       
+  
   public double getEncoderPosition(){
     return beltEncoder.getPosition();
   }
@@ -53,12 +55,8 @@ public class BeltSubsystem extends SubsystemBase{
   }
 
   public void setSpeed(double speed){
-    beltMotor.set(speed);
-    beltMotor2.set(-speed);
-    double belt1Current = beltMotor.getOutputCurrent();
-    SmartDashboard.putNumber("belt 1 current", belt1Current);
-    double belt2Current = beltMotor2.getOutputCurrent();
-    SmartDashboard.putNumber("belt 2 current", belt2Current);
+    beltMotorLeader.set(speed);
+    beltMotorFollower.set(speed);
   }
 
   @Override

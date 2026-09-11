@@ -21,7 +21,7 @@ public class HerderSubsystem extends SubsystemBase{
    public HerderSubsystem(int sparkMaxId, int sparkMaxId2) {
     herderMotor = new SparkMax(sparkMaxId, MotorType.kBrushless);
     herderEncoder = herderMotor.getEncoder();
-    // no winch
+    // no winch how to rotate
     winchMotor = new SparkMax(sparkMaxId2, MotorType.kBrushless);
     winchEncoder = winchMotor.getEncoder();
     winchEncoder.setPosition(0);
@@ -42,9 +42,9 @@ public class HerderSubsystem extends SubsystemBase{
 
   // no winch
   public void setWinchSpeed(double speed){
-    double maxWinchLimit = -52.5; //example, find real limit
+    double maxWinchLimit = -52.5; //example, find real limit // how to rotate???
     double minWinchLimit = 2.5;
-    if (winchEncoder.getPosition() < maxWinchLimit && speed < 0) {
+    if (winchEncoder.getPosition() < maxWinchLimit && speed < 0) { // must rotate
       speed = 0;
     }
     else if (winchEncoder.getPosition() > minWinchLimit && speed < 0) {
@@ -52,13 +52,13 @@ public class HerderSubsystem extends SubsystemBase{
     }
     //TODO: Determine the encoder position limits for the winch and implement logic to prevent the winch from moving beyond those limits
     winchMotor.set(speed);
-    
+
     SmartDashboard.putNumber("Winch", winchEncoder.getPosition());
     SmartDashboard.putNumber("Winch Speed", speed);
     double winchCurrent = winchMotor.getOutputCurrent();
     SmartDashboard.putNumber("winch current", winchCurrent);
     }
-
+  // no winch 
   public double getWinchEncoderPosition(){
     double position = winchEncoder.getPosition();
     SmartDashboard.putNumber("Winch Encoder", position);
