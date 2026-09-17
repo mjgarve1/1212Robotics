@@ -66,7 +66,7 @@ public class ShooterJoystickCmd extends Command {
       m_shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed);
     }
     else if (Math.abs(herdSpeed) > OIConstants.kTriggerDeadband) {
-      m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
+      // m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
       m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
       //m_shooterSubsystem.setSpeed(ShooterConstants.kBackShooterMotorSpeed); //comment line disable shooter motors during herding
     }

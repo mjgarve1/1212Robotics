@@ -42,8 +42,8 @@ public class HerderSubsystem extends SubsystemBase{
 
   // no winch
   public void setWinchSpeed(double speed){
-    double maxWinchLimit = -52.5; //example, find real limit // how to rotate???
-    double minWinchLimit = 2.5;
+    double maxWinchLimit = -4.8; //example, find real limit // how to rotate???
+    double minWinchLimit = 0;
     if (winchEncoder.getPosition() < maxWinchLimit && speed < 0) { // must rotate
       speed = 0;
     }
