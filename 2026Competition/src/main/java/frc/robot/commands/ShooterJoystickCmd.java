@@ -57,7 +57,7 @@ public class ShooterJoystickCmd extends Command {
     //1. get real time joystick input
     double shootSpeed = m_shootFunction.get();
     double herdSpeed = m_herdFunction.get();
-    boolean dump = m_dumpFunction.get();
+    boolean dump = m_dumpFunction.get(); 
     boolean reverse = m_reverseFunction.get();
     //2. apply deadband
     if(Math.abs(shootSpeed) > OIConstants.kTriggerDeadband) {
@@ -70,7 +70,7 @@ public class ShooterJoystickCmd extends Command {
       m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
       //m_shooterSubsystem.setSpeed(ShooterConstants.kBackShooterMotorSpeed); //comment line disable shooter motors during herding
     }
-    else if(dump) {
+    else if(dump) { // is there a dump and reverse function now?
       m_beltSubsystem.setSpeed(BeltConstants.kBeltOutSpeed);
       m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderOutSpeed);
       m_shooterSubsystem.setSpeed(ShooterConstants.kBackShooterMotorSpeed);

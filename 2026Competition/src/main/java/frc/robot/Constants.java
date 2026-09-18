@@ -41,8 +41,8 @@ public final class Constants {
     public static int kHerderMotorPort = 52;
     public static int kWinchMotorPort = 50; 
 
-    public static double kHerderOutSpeed = 0.5; // changed from 0.1
-    public static double kHerderInSpeed = -0.5; // changed from -0.1
+    public static double kHerderOutSpeed = 0.5; // changed from 0.1 
+    public static double kHerderInSpeed = -0.75; // changed from -0.1 // changed from -0.5
 
   }
  
@@ -50,9 +50,9 @@ public final class Constants {
     public static int kShooter1MotorPort = 30; 
     public static int kShooter2MotorPort = 31; 
 
-    public static double kShooterMotorSpeed = -0.5; //changed direction to neg
+    public static double kShooterMotorSpeed = 0.85; //changed direction to neg // changed direction again // changed from .5
     public static double kShooterMotorSpeedAuto = -0.5; //changed direction to neg, changed from .85
-    public static double kBackShooterMotorSpeed = 0.2; //changed from -0.5 to 0.5
+    public static double kBackShooterMotorSpeed = -0.2; //changed from -0.5 to 0.5
     public static final Pose2d RED_GOAL_POSE = new Pose2d(11.915, 4.03, new Rotation2d());
     public static final Pose2d BLUE_GOAL_POSE = new Pose2d(4.603, 4.03, new Rotation2d());
 
@@ -104,15 +104,15 @@ public final class Constants {
 
     public static final double kAimAtGoalP = 4.0;
 
-    public static final int kFrontLeftDriveMotorPort = 4;
-    public static final int kBackLeftDriveMotorPort = 11; 
-    public static final int kFrontRightDriveMotorPort = 20; 
-    public static final int kBackRightDriveMotorPort = 3; 
+    public static final int kFrontLeftDriveMotorPort =  11;
+    public static final int kBackLeftDriveMotorPort = 3;
+    public static final int kFrontRightDriveMotorPort = 4; 
+    public static final int kBackRightDriveMotorPort = 20; 
 
-    public static final int kFrontLeftTurningMotorPort = 14;
-    public static final int kBackLeftTurningMotorPort = 13;
-    public static final int kFrontRightTurningMotorPort = 10; 
-    public static final int kBackRightTurningMotorPort = 5;
+    public static final int kFrontLeftTurningMotorPort = 13;
+    public static final int kBackLeftTurningMotorPort = 5;
+    public static final int kFrontRightTurningMotorPort = 14; 
+    public static final int kBackRightTurningMotorPort = 10;
 
    
 

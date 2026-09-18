@@ -41,13 +41,16 @@ public class HerderSubsystem extends SubsystemBase{
   }
 
   // no winch
-  public void setWinchSpeed(double speed){
-    double maxWinchLimit = -4.8; //example, find real limit // how to rotate???
-    double minWinchLimit = 0;
-    if (winchEncoder.getPosition() < maxWinchLimit && speed < 0) { // must rotate
+  public void setWinchSpeed(double speed){ // test winch values, it doesn't go up unless it starts out which shouldn't hap
+    double maxWinchLimit = 5.5; //example, find real limit // how to rotate???
+    double minWinchLimit = -4.8;
+
+    // If trying to move up (positive speed) and already at/above max, stop.
+    if (speed > 0 && winchEncoder.getPosition() >= maxWinchLimit) {
       speed = 0;
     }
-    else if (winchEncoder.getPosition() > minWinchLimit && speed < 0) {
+    // If trying to move down (negative speed) and already at/below min, stop.
+    else if (speed < 0 && winchEncoder.getPosition() <= minWinchLimit) {
       speed = 0;
     }
     //TODO: Determine the encoder position limits for the winch and implement logic to prevent the winch from moving beyond those limits
@@ -58,7 +61,16 @@ public class HerderSubsystem extends SubsystemBase{
     double winchCurrent = winchMotor.getOutputCurrent();
     SmartDashboard.putNumber("winch current", winchCurrent);
     }
-  // no winch 
+
+  /* do we actually need to change the winch axis to a winch button?
+   * public double winchInSpeed(double speed) {
+   * double winchOut = 5.5;
+   * if (winchEncoder.getPosition() < winchOut && speed < 0) {
+   *   speed = 0; 
+   * }
+   * }
+   */
+  // no winch but herder up and down
   public double getWinchEncoderPosition(){
     double position = winchEncoder.getPosition();
     SmartDashboard.putNumber("Winch Encoder", position);

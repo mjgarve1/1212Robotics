@@ -33,15 +33,16 @@ public class BeltSubsystem extends SubsystemBase{
    // beltMotorFollowerConfig
      //       .inverted(true);
 
-    // config.idleMode(IdleMode.kBrake);
+    /* 
+     config.idleMode(IdleMode.kBrake);
     
-   // if (DriverStation.isAutonomous()) {
-     // config.smartCurrentLimit(25,30);
-    //} 
-    // else if (DriverStation.isTeleop()) {
-      // config.smartCurrentLimit(22,30);  //limit current for beltmotor
-    // };
-    
+   //if (DriverStation.isAutonomous()) {
+     config.smartCurrentLimit(25,30);
+    } 
+    else if (DriverStation.isTeleop()) {
+      config.smartCurrentLimit(22,30);  //limit current for beltmotor
+    };
+    */
     beltMotorLeader.configure(beltMotorLeaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     //beltMotorFollower.configure(beltMotorFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }       
