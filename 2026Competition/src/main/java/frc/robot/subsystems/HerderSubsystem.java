@@ -28,7 +28,7 @@ public class HerderSubsystem extends SubsystemBase{
     
     config = new SparkMaxConfig();
 
-    config.idleMode(IdleMode.kBrake);
+    config.idleMode(IdleMode.kCoast);
 
     herderMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -42,8 +42,8 @@ public class HerderSubsystem extends SubsystemBase{
 
   // no winch
   public void setWinchSpeed(double speed){ // test winch values, it doesn't go up unless it starts out which shouldn't hap
-    double maxWinchLimit = 5.5; //example, find real limit // how to rotate???
-    double minWinchLimit = -4.8;
+    double maxWinchLimit = 500.5; //example, find real limit // how to rotate???
+    double minWinchLimit = -400.8; //min -4.8 max 5.5
 
     // If trying to move up (positive speed) and already at/above max, stop.
     if (speed > 0 && winchEncoder.getPosition() >= maxWinchLimit) {
@@ -68,7 +68,7 @@ public class HerderSubsystem extends SubsystemBase{
    * if (winchEncoder.getPosition() < winchOut && speed < 0) {
    *   speed = 0; 
    * }
-   * }
+   * }aq
    */
   // no winch but herder up and down
   public double getWinchEncoderPosition(){
