@@ -16,8 +16,10 @@ public class PowerSubsystem extends SubsystemBase {
 
 @Override
 public void periodic() {
-    SmartDashboard.putNumber("Total Current", m_pdh.getTotalCurrent());
-    SmartDashboard.putNumber("Channel 5 Current", m_pdh.getCurrent(5));
-    SmartDashboard.putNumber("Battery Voltage", m_pdh.getVoltage());
+   // SmartDashboard.putNumber("Total Current", m_pdh.getTotalCurrent());
+// SmartDashboard.putNumber("Channel 5 Current", m_pdh.getCurrent(5));
+   // SmartDashboard.putNumber("Battery Voltage", m_pdh.getVoltage());
+
+   // none of these aint really doing anything just causing a bunch of errors clogging up the console
 }
 }
