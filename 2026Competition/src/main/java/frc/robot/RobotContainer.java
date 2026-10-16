@@ -80,6 +80,7 @@ public class RobotContainer {
       shooterSubsystem, beltSubsystem, herderSubsystem, swerveSubsystem,
       () -> driverJoystickTwo.getRawAxis(OIConstants.kShootFuelButton),
       () -> driverJoystickTwo.getRawAxis(OIConstants.kHerdFuelButton),
+      () -> driverJoystickTwo.getRawAxis(OIConstants.kBeltFuelButton),
       () -> driverJoystickTwo.getRawButton(OIConstants.kDumpFuelButton),
       () -> driverJoystickTwo.getRawAxis(OIConstants.kWinchAxis),
       () -> driverJoystickTwo.getRawButton(OIConstants.kReverseButton)

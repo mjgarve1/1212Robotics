@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,17 +45,22 @@ public class DriveForwardUntilVisionCmd extends Command {
   public void execute() {
     ChassisSpeeds speeds;
     double invert = -1.0;
+    
     if( !timer.hasElapsed(2.0) && !gotVision)
     {
       // Drive forward at 1 m/s (field-relative handled in subsystem)
       var alliance = DriverStation.getAlliance();
       if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-        speeds = new ChassisSpeeds(1.0, 0.0, 0.0);
+        speeds = new ChassisSpeeds(0.0, 0.5, 0.0);
+        belt.setSpeed(0);
+        shooter.setSpeed(ShooterConstants.kShooterMotorSpeedAuto);
       }
       else
       {
         
-        speeds = new ChassisSpeeds(1.0, 0.0, 0.0);
+        speeds = new ChassisSpeeds(0.0, 0.5, 0.0);
+        belt.setSpeed(0);
+        shooter.setSpeed(ShooterConstants.kShooterMotorSpeedAuto);
       }
       swerve.setChassisSpeed(speeds);
       swerve.setModuleStates();
@@ -76,6 +82,7 @@ public class DriveForwardUntilVisionCmd extends Command {
     }
     SmartDashboard.putBoolean("ShootNow", shootNow);
     SmartDashboard.putBoolean("GotVision", gotVision);
+    
 
     var alliance = DriverStation.getAlliance();
     Pose2d goalPose = ShooterConstants.BLUE_GOAL_POSE;
@@ -86,8 +93,11 @@ public class DriveForwardUntilVisionCmd extends Command {
     // If gotVision is true, then you can rotate the robot and use its distance to calculate how to shoot the balls.
     if (gotVision) {
       double distance = swerve.getGoalDistance();
+      SmartDashboard.putNumber("distance", distance);
       double turningSpeed = swerve.getAimTurningSpeed(goalPose);
-      double GoodDistanceHere = 1.3;
+      double GoodDistanceHere = 10; //1.3 //9
+      
+
       if(shootNow)
       {
         
@@ -97,23 +107,27 @@ public class DriveForwardUntilVisionCmd extends Command {
         swerve.setModuleStates();
         
         belt.setSpeed(BeltConstants.kBeltInSpeed);
-        shooter.setSpeed(ShooterConstants.kShooterMotorSpeedAuto); // changed from shootermotorspeed to be slower in auto
+        shooter.setSpeed(ShooterConstants.kShooterMotorSpeedAuto);
       }
       else if (Math.abs(turningSpeed) > 0.1) { //changed from .15
         //If it wants to rotate quite a bit, only rotate
         speeds = new ChassisSpeeds(0.0, 0.0, turningSpeed);
         swerve.setChassisSpeed(speeds);
         swerve.setModuleStates();
+        shooter.setSpeed(ShooterConstants.kShooterMotorSpeedAuto);
       }
       else if (distance > GoodDistanceHere) {
         //If it doesnt need to rotate, drive forward until its in range
-        speeds = new ChassisSpeeds(invert, 0.0, 0.0);
+        speeds = new ChassisSpeeds(0.0, invert, 0.0);
         swerve.setChassisSpeed(speeds);
         swerve.setModuleStates();
+        shooter.setSpeed(ShooterConstants.kShooterMotorSpeedAuto);
+        
       }
       else
       {
         shootNow = true;
+
       }
 
     }

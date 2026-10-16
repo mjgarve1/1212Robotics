@@ -24,6 +24,7 @@ public class ShooterJoystickCmd extends Command {
   private final ShooterSubsystem m_shooterSubsystem;
   private final Supplier<Double> m_shootFunction;
   private final Supplier<Double> m_herdFunction;
+  private final Supplier<Double> m_beltFunction;
   private final Supplier<Double> m_winchFunction;
   private final Supplier<Boolean> m_dumpFunction;
   private final Supplier<Boolean> m_reverseFunction;
@@ -32,11 +33,12 @@ public class ShooterJoystickCmd extends Command {
   private final SwerveSubsystem m_swerveSubsystem;
 
   public ShooterJoystickCmd(ShooterSubsystem shooterSubsystem, 
-  BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Boolean> dumpFunction, Supplier<Double> winchFunction, Supplier<Boolean> reverseFunction) {
+  BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Double> beltFunction, Supplier<Boolean> dumpFunction, Supplier<Double> winchFunction, Supplier<Boolean> reverseFunction) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooterSubsystem = shooterSubsystem;
     m_shootFunction = shootFunction;
     m_herdFunction = herdFunction;
+    m_beltFunction = beltFunction;
     m_dumpFunction = dumpFunction;
     m_winchFunction = winchFunction;
     m_reverseFunction = reverseFunction;
@@ -57,13 +59,19 @@ public class ShooterJoystickCmd extends Command {
     //1. get real time joystick input
     double shootSpeed = m_shootFunction.get();
     double herdSpeed = m_herdFunction.get();
+    double beltSpeed = m_beltFunction.get();
     boolean dump = m_dumpFunction.get(); 
     boolean reverse = m_reverseFunction.get();
     //2. apply deadband
     if(Math.abs(shootSpeed) > OIConstants.kTriggerDeadband) {
-      m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
-      m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
+      //m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
+      //m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
       m_shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed);
+    }
+    else if (Math.abs(beltSpeed) > OIConstants.kControllerAxisDeadband) {
+      m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
+      m_shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed);
+      
     }
     else if (Math.abs(herdSpeed) > OIConstants.kTriggerDeadband) {
       // m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);

@@ -50,8 +50,8 @@ public final class Constants {
     public static int kShooter1MotorPort = 30; 
     public static int kShooter2MotorPort = 31; 
 
-    public static double kShooterMotorSpeed = 0.8; //changed direction to neg // changed direction again // changed from .5
-    public static double kShooterMotorSpeedAuto = -0.5; //changed direction to neg, changed from .85
+    public static double kShooterMotorSpeed = 0.45; //changed direction to neg // changed direction again // changed from .5
+    public static double kShooterMotorSpeedAuto = 0.5; //changed direction to neg, changed from .85
     public static double kBackShooterMotorSpeed = -0.2; //changed from -0.5 to 0.5
     public static final Pose2d RED_GOAL_POSE = new Pose2d(11.915, 4.03, new Rotation2d());
     public static final Pose2d BLUE_GOAL_POSE = new Pose2d(4.603, 4.03, new Rotation2d());
@@ -222,14 +222,17 @@ public final class Constants {
     public static final int kShootFuelButton = XboxControllerMappingConstants.RIGHT_TRIGGER;
     public static final int kHerdFuelButton = XboxControllerMappingConstants.LEFT_TRIGGER;
     public static final int kDumpFuelButton = XboxControllerMappingConstants.LEFT_BUMPER;
+    public static final int kBeltFuelButton = XboxControllerMappingConstants.RIGHT_STICK_Y;
 
-    public static final int kWinchAxis = XboxControllerMappingConstants.RIGHT_STICK_Y;
+    public static final int kWinchAxis = XboxControllerMappingConstants.LEFT_STICK_Y;
     // winch in button on arms controller
     //public static final int kWinchInButton = XboxControllerMappingConstants.A;
 
     // Controller Two Button Definitions
     public static final double kTriggerDeadband = 0.25;
     public static final int kReverseButton = XboxControllerMappingConstants.RIGHT_BUMPER;
+
+    
   }
 
   public static final class AutoConstants {
