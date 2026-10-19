@@ -20,6 +20,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ResetGyroCmd;
+import frc.robot.commands.RightAutoCmd;
 import frc.robot.commands.ShooterJoystickCmd;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.BeltSubsystem;
@@ -53,6 +54,7 @@ public class RobotContainer {
   private final Command midAuto;
   private final Command taxiAuto;
   private final Command visionAcquireAuto;
+  private final Command rightAuto;
 
   // Controller input configuration
   private final Joystick driverJoystickOne = new Joystick(OIConstants.kDriverControllerOnePort);
@@ -89,6 +91,7 @@ public class RobotContainer {
     autosChooser = new SendableChooser<>();
     midAuto = Autos.middleAuto(swerveSubsystem);
     taxiAuto = Autos.taxiAuto(swerveSubsystem);
+    rightAuto = Autos.rightAuto(swerveSubsystem, beltSubsystem, shooterSubsystem);
   visionAcquireAuto = Autos.visionAcquireAuto(swerveSubsystem, beltSubsystem, shooterSubsystem);
 
     // Default to Middle Auto, which works out to drive the robot forward
@@ -96,6 +99,7 @@ public class RobotContainer {
     // No idea what taxiAuto is, figure it out later
     autosChooser.addOption("taxiAuto", taxiAuto);
     autosChooser.addOption("Vision Acquire Auto", visionAcquireAuto);
+    autosChooser.addOption("Right Auto", rightAuto);
 
     // Add the ability to swap these around (useful in competition to choose
     // a different autonomous operation depending on starting position)

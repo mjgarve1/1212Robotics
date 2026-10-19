@@ -38,7 +38,7 @@ public final class Autos {
        );
   }
 
-  //
+  /* 
   public static Command leftAuto(SwerveSubsystem swerveSubsystem){
     return Commands.sequence(
       new AutoDriveCmd(swerveSubsystem, AutoConstants.kMidDriveForwardSpeed, 0, 0).withTimeout(AutoConstants.kMidDriveForwardTime),
@@ -48,7 +48,11 @@ public final class Autos {
 
     );
   }
+  */
 
+  public static Command rightAuto(SwerveSubsystem swerveSubsystem, BeltSubsystem beltSubsystem, ShooterSubsystem shooterSubsystem){
+    return new RightAutoCmd(swerveSubsystem, beltSubsystem, shooterSubsystem);
+  }
   //
   public static Command taxiAuto(SwerveSubsystem swerveSubsystem){
     return Commands.sequence(
