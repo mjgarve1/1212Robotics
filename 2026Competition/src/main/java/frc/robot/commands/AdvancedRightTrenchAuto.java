@@ -17,7 +17,7 @@ import frc.robot.subsystems.BeltSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 // Command Imports
-import frc.robot.commands.Auto.AutoBotAlgae;
+//import frc.robot.commands.Auto.AutoBotAlgae;
 import frc.robot.commands.DriveForwardUntilVisionCmd;
 import frc.robot.commands.RightAutoCmd;
 
@@ -37,7 +37,7 @@ public class AdvancedRightTrenchAuto {
 
         // 2. Register Named Commands for PathPlanner
         // Register any named commands BEFORE building autos or initializing AutoBuilder
-        NamedCommands.registerCommand("AutoBotAlgae", new AutoBotAlgae());
+        //NamedCommands.registerCommand("AutoBotAlgae", new AutoBotAlgae());
         NamedCommands.registerCommand("VisionAcquire", new DriveForwardUntilVisionCmd(m_swerveSubsystem, m_beltSubsystem, m_shooterSubsystem).withTimeout(2.0));
         NamedCommands.registerCommand("Shoot5Point5", new RightAutoCmd(m_swerveSubsystem, m_beltSubsystem, m_shooterSubsystem).withTimeout(5.5));
 

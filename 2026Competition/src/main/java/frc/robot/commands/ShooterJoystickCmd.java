@@ -31,6 +31,7 @@ public class ShooterJoystickCmd extends Command {
   private final BeltSubsystem m_beltSubsystem;
   private final HerderSubsystem m_herderSubsystem;
   private final SwerveSubsystem m_swerveSubsystem;
+  private double shooting = ShooterConstants.kShooterMotorSpeed;
 
   public ShooterJoystickCmd(ShooterSubsystem shooterSubsystem, 
   BeltSubsystem beltSubsystem, HerderSubsystem herderSubsystem, SwerveSubsystem swerveSubsystem, Supplier<Double> shootFunction, Supplier<Double> herdFunction, Supplier<Double> beltFunction, Supplier<Boolean> dumpFunction, Supplier<Double> winchFunction, Supplier<Boolean> reverseFunction) {
@@ -62,11 +63,16 @@ public class ShooterJoystickCmd extends Command {
     double beltSpeed = m_beltFunction.get();
     boolean dump = m_dumpFunction.get(); 
     boolean reverse = m_reverseFunction.get();
+  
     //2. apply deadband
     if(Math.abs(shootSpeed) > OIConstants.kTriggerDeadband) {
       //m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
-      //m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed);
-      m_shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed);
+      //m_herderSubsystem.setHerderSpeed(HerderConstants.kHerderInSpeed); 
+      //m_shooterSubsystem.setSpeed(ShooterConstants.kShooterMotorSpeed);
+      shooting += 1; 
+      shooting = Math.min(shooting, 1.0);
+      m_shooterSubsystem.setSpeed(shooting);
+
     }
     else if (Math.abs(beltSpeed) > OIConstants.kControllerAxisDeadband) {
       m_beltSubsystem.setSpeed(BeltConstants.kBeltInSpeed);
@@ -92,6 +98,7 @@ public class ShooterJoystickCmd extends Command {
       m_shooterSubsystem.setSpeed(0);
       m_beltSubsystem.setSpeed(0);
       m_herderSubsystem.setHerderSpeed(0);
+      shooting = ShooterConstants.kShooterMotorSpeed; 
     }
 
     double winchSpeed = m_winchFunction.get();
