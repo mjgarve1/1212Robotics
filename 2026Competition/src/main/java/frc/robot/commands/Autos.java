@@ -65,6 +65,10 @@ public final class Autos {
     return new DriveForwardUntilVisionCmd(swerveSubsystem, beltSubsystem, shooterSubsystem);
   }
 
+  // idk about this but we'll see
+  public static AdvancedRightTrenchAuto rightTrenchAuto(SwerveSubsystem swerveSubsystem, BeltSubsystem beltSubsystem, ShooterSubsystem shooterSubsystem) {
+    return new AdvancedRightTrenchAuto(swerveSubsystem, beltSubsystem, shooterSubsystem);
+  }
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
